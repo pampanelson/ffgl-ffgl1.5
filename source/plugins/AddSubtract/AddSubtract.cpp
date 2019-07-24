@@ -71,19 +71,26 @@ vec3 computeColor(vec2 p, float t, float hs){
 
 void main() {
     
-    float time = ticks/1000.0;
-    vec2 resolution = vec2(width,height);
-    vec2 fragCoord = vec2(gl_FragCoord.x,resolution.y - gl_FragCoord.y) ;
+    // name convert ---------------
+    vec4 fragColor;
+    float iTime = ticks/1000.0;
+    vec2 iResolution = vec2(width,height);
+    vec2 fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
 
-    vec2 position = ( fragCoord.xy / resolution.xy )+0.5;
+    // ---------------
+    vec2 position = ( fragCoord.xy / iResolution.xy )+0.5;
     
     float FIELD = 20.0;
     float HEIGHT = 0.7;
 
-    float hs = FIELD*(HEIGHT+cos(time)*0.1);
+    float hs = FIELD*(HEIGHT+cos(iTime)*0.1);
     vec2 p = (position)*FIELD;
-    vec3 color = computeColor(p, time, hs);
-    gl_FragColor = vec4(color, 1.0 );
+    vec3 color = computeColor(p, iTime, hs);
+    fragColor = vec4(color, 1.0 );
+    
+    
+    // finish ---------------
+    gl_FragColor = fragColor;
     
 }
 //void main()
