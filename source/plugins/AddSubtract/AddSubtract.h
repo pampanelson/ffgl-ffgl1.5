@@ -45,5 +45,8 @@ protected:
 	GLint m_BrightnessLocation;
     GLint m_TicksLocation;
     
+    GLint m_WidthLocation;
+    GLint m_HeightLocation;
+    
     double ticks;
 };

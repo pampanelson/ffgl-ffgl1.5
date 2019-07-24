@@ -39,12 +39,59 @@ static const std::string fragmentShaderCode = STRINGIFY(
 uniform sampler2D inputTexture;
 uniform vec3 brightness;
 uniform float ticks;
-void main()
-{
-	//vec4 color = texture2D(inputTexture,gl_TexCoord[0].st);
-    vec4 color = vec4(0.0,0.0,sin(ticks),1.0);
-	gl_FragColor  =  color;
+uniform float width;
+uniform float height;
+
+
+vec2 eq(vec2 p,float t){
+    vec2 fx = vec2(0.0);
+    fx.x = (sin(p.y+cos(t+p.x*0.2))*cos(p.x-t));
+    fx.x *= acos(fx.x);
+    fx.x *= -distance(fx.x,0.5)*p.x/p.y;
+    fx.y = p.y-fx.x;
+    return fx;
 }
+
+vec3 computeColor(vec2 p, float t, float hs){
+    vec3 TONE = vec3(0.5,0.2,0.3);
+    int ITERATION = 2;
+    vec3 color = vec3(0.0);
+    vec2 fx = eq(p,t);
+    for(int i=0; i<ITERATION; i++)
+    {
+        p.x+=p.x;
+        color.r += TONE.r/length(fx.y-fx.x-hs);
+        fx.x += eq(p,t+float(i+1)).x;
+        color.g += TONE.g/length(fx.y-fx.x-hs);
+        fx.x += eq(p,t+float(i+2)).x;
+        color.b += TONE.b/length(fx.y-fx.x-hs);
+    }
+    return color;
+}
+
+void main() {
+    
+    float time = ticks/1000.0;
+    vec2 resolution = vec2(width,height);
+    vec2 fragCoord = vec2(gl_FragCoord.x,resolution.y - gl_FragCoord.y);
+
+    vec2 position = ( fragCoord.xy / resolution.xy )+0.5;
+    
+    float FIELD = 20.0;
+    float HEIGHT = 0.7;
+
+    float hs = FIELD*(HEIGHT+cos(time)*0.1);
+    vec2 p = (position)*FIELD;
+    vec3 color = computeColor(p, time, hs);
+    gl_FragColor = vec4(color, 1.0 );
+    
+}
+//void main()
+//{
+//    //vec4 color = texture2D(inputTexture,gl_TexCoord[0].st);
+//    vec4 color = vec4(0.0,0.0,sin(ticks),1.0);
+//    gl_FragColor  =  color;
+//}
 );
 
 AddSubtract::AddSubtract()
@@ -92,6 +139,8 @@ FFResult AddSubtract::InitGL(const FFGLViewportStruct *vp)
 	m_inputTextureLocation = m_shader.FindUniform("inputTexture");
 	m_BrightnessLocation = m_shader.FindUniform("brightness");
     m_TicksLocation = m_shader.FindUniform("ticks");
+    m_WidthLocation = m_shader.FindUniform("width");
+    m_HeightLocation = m_shader.FindUniform("height");
     
 	//the 0 means that the 'inputTexture' in
 	//the shader will use the texture bound to GL texture unit 0
@@ -135,6 +184,12 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 	//width,height of the used portion of the allocated texture space
 	FFGLTexCoords maxCoords = GetMaxGLTexCoords(Texture);
 
+    
+    //get the width of the viewport
+    GLint viewport[4];
+    glGetIntegerv( GL_VIEWPORT, viewport );
+    
+    
 	//assign the Brightness
 	glUniform3f(m_BrightnessLocation,
 				-1.0f + (m_BrightnessR * 2.0f),
@@ -145,6 +200,11 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 
     // assign ticks in millisecond
     glUniform1f(m_TicksLocation,ticks);
+    
+    // assign width and height
+    glUniform1f(m_WidthLocation, (float)viewport[2]);
+    glUniform1f(m_HeightLocation, (float)viewport[3]);
+
     
 	//activate texture unit 1 and bind the input texture
 	glActiveTexture(GL_TEXTURE0);
