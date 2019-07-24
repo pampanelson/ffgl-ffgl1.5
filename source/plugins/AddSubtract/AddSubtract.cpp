@@ -14,15 +14,15 @@
 
 static CFFGLPluginInfo PluginInfo ( 
 	AddSubtract::CreateInstance,		// Create method
-	"RE01",								// Plugin unique ID
-	"AddSub Example",					// Plugin name
+	"PDemo190723",								// Plugin unique ID
+	"PampaDemo0",					// Plugin name
 	1,						   			// API major version number 													
 	500,								// API minor version number
 	1,									// Plugin major version number
 	000,								// Plugin minor version number
 	FF_EFFECT,							// Plugin type
-	"Add and Subtract colours",			// Plugin description
-	"Resolume FFGL Example"				// About
+	"demo",			// Plugin description
+	"lohosoft.com"				// About
 );
 
 static const std::string vertexShaderCode = STRINGIFY(
