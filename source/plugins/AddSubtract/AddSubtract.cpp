@@ -38,13 +38,11 @@ void main()
 static const std::string fragmentShaderCode = STRINGIFY(
 uniform sampler2D inputTexture;
 uniform vec3 brightness;
+uniform float ticks;
 void main()
 {
-	vec4 color = texture2D(inputTexture,gl_TexCoord[0].st);
-	if (color.a > 0.0) //unpremultiply
-		color.rgb /= color.a;
-	color.rgb = color.rgb + brightness;
-	color.rgb *= color.a; //premultiply
+	//vec4 color = texture2D(inputTexture,gl_TexCoord[0].st);
+    vec4 color = vec4(sin(ticks),0.0,0.0,1.0);
 	gl_FragColor  =  color;
 }
 );
@@ -93,7 +91,8 @@ FFResult AddSubtract::InitGL(const FFGLViewportStruct *vp)
 	//to assign a value
 	m_inputTextureLocation = m_shader.FindUniform("inputTexture");
 	m_BrightnessLocation = m_shader.FindUniform("brightness");
-
+    m_TicksLocation = m_shader.FindUniform("ticks");
+    
 	//the 0 means that the 'inputTexture' in
 	//the shader will use the texture bound to GL texture unit 0
 	glUniform1i(m_inputTextureLocation, 0);
@@ -125,6 +124,8 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 	if (pGL->inputTextures[0]==NULL)
 		return FF_FAIL;
 
+    
+    ticks = getTicks();
 	//activate our shader
 	m_shader.BindShader();
 
@@ -142,6 +143,9 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 				);
 	
 
+    // assign ticks in millisecond
+    glUniform1f(m_TicksLocation,ticks);
+    
 	//activate texture unit 1 and bind the input texture
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, Texture.Handle);

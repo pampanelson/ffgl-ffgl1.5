@@ -43,5 +43,7 @@ protected:
     FFGLShader m_shader;
 	GLint m_inputTextureLocation;
 	GLint m_BrightnessLocation;
-
+    GLint m_TicksLocation;
+    
+    double ticks;
 };
