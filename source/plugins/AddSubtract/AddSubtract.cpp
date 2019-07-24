@@ -42,7 +42,7 @@ uniform float ticks;
 uniform float width;
 uniform float height;
 
-
+const float Red = 1.0;
 
 void main() {
     
@@ -53,7 +53,7 @@ void main() {
     vec2 fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
 
     // ---------------
-
+    fragColor = vec4(Red,0.0,0.0,1.0);
     
     // finish ---------------
     gl_FragColor = fragColor;
