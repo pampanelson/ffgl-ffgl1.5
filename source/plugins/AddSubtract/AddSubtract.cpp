@@ -22,7 +22,7 @@ static CFFGLPluginInfo PluginInfo (
 	000,								// Plugin minor version number
 	FF_EFFECT,							// Plugin type
 	"demo",			// Plugin description
-	"lohosoft.com"				// About
+	"by Pampa -- lohosoft.com"				// About
 );
 
 static const std::string vertexShaderCode = STRINGIFY(
@@ -42,7 +42,7 @@ uniform float ticks;
 void main()
 {
 	//vec4 color = texture2D(inputTexture,gl_TexCoord[0].st);
-    vec4 color = vec4(sin(ticks),0.0,0.0,1.0);
+    vec4 color = vec4(0.0,0.0,sin(ticks),1.0);
 	gl_FragColor  =  color;
 }
 );

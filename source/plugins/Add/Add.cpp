@@ -12,8 +12,8 @@
 
 static CFFGLPluginInfo PluginInfo ( 
 	Add::CreateInstance,				// Create method
-	"RM01",								// Plugin unique ID
-	"Add Example",      				// Plugin name
+	"PRM01",								// Plugin unique ID
+	"PampaAdd",      				// Plugin name
 	1,						   			// API major version number 													
 	500,								// API minor version number
 	1,									// Plugin major version number
