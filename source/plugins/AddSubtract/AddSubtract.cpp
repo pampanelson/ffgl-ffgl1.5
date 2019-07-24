@@ -73,7 +73,7 @@ void main() {
     
     float time = ticks/1000.0;
     vec2 resolution = vec2(width,height);
-    vec2 fragCoord = vec2(gl_FragCoord.x,resolution.y - gl_FragCoord.y);
+    vec2 fragCoord = vec2(gl_FragCoord.x,resolution.y - gl_FragCoord.y) ;
 
     vec2 position = ( fragCoord.xy / resolution.xy )+0.5;
     
