@@ -14,8 +14,8 @@
 
 static CFFGLPluginInfo PluginInfo ( 
 	AddSubtract::CreateInstance,		// Create method
-	"PDemo190723",								// Plugin unique ID
-	"PampaDemo0",					// Plugin name
+	"PDemo190725",								// Plugin unique ID
+	"PP3D",					// Plugin name
 	1,						   			// API major version number 													
 	500,								// API minor version number
 	1,									// Plugin major version number
@@ -42,18 +42,94 @@ uniform float ticks;
 uniform float width;
 uniform float height;
 
+const int samples = 16;
+const int num_steps = 6;
+const float PI = 3.141592;
+const float radius = 10.;
+vec2 iResolution;
+float r2D(vec2 p)
+{
+    return fract(sin(dot(p, vec2(32.91, 54.28)))*96516.4172);
+}
+                                                        
+float pattern(vec2 p, float s)
+{
+    vec2 i = floor(p*s);
+    return r2D(i);
+}
+                                                        
+vec3 normals(vec2 p, float s, float h)
+{
+    float pixel = 1./iResolution.y;
+    vec2 e = vec2(pixel, 0.);
+    return normalize(
+                     vec3(
+                          (pattern(p-e.xy, s)-h)/e.x,
+                          (pattern(p-e.yx, s)-h)/e.x,
+                          1.));
+}
+                                                        
 
+
+
+float ambient_occlusion(vec2 p, float h, vec3 n, float s)
+{
+    float ao = 0.;
+    float pixel = 1./iResolution.y;
+    vec3 origin = vec3(p, h);
+    for (int i = 0; i < samples; i++)
+    {
+        float angle = float(i)*PI/float(samples);
+        vec2 dir = vec2(cos(angle), sin(angle));
+        for (int j = 1; j <= num_steps; j++)
+        {
+            vec2 point = p+float(j)*pixel*dir*radius;
+            float r = pattern(point, s);
+            vec3 current = vec3(point, r);
+            vec3 dir_curr = current - origin;
+            float dir = dot(normalize(dir_curr), n);
+            if (dir < 0.)
+                break;
+            if (dir > 0.)
+            {
+                ao += length(dir_curr)/float(j);
+                break;
+            }
+        }
+    }
+    ao /= float(samples);
+    return ao;
+}
+                                                        
 
 void main() {
     
     // name convert ---------------
     vec4 fragColor;
     float iTime = ticks/1000.0;
-    vec2 iResolution = vec2(width,height);
+    iResolution = vec2(width,height);
     vec2 fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
 
     // ---------------
 
+    fragColor = vec4(1.0,0.0,0.0,1.0);
+    
+    vec2 uv = fragCoord/iResolution.y;
+    
+    float s = 6.;
+    float h = pattern(uv, s);
+    vec3 n = normals(uv, s, h);
+    float ao = 1.-ambient_occlusion(uv, h, n, s);
+    
+    float t = iTime;
+    vec3 ld = normalize(vec3(cos(t), sin(t), 1.)*3.-vec3(uv, h));
+    float diff = max(dot(n, ld), 0.);
+    float l = diff*ao;
+    
+    vec3 col = vec3(0.);
+    col += l*mix(vec3(1.), vec3(0.0, .6, .8), h);
+    
+    fragColor = vec4(col,1.0);
     
     // finish ---------------
     gl_FragColor = fragColor;
