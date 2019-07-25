@@ -53,7 +53,7 @@ void main() {
     vec2 fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
 
     // ---------------
-
+    fragColor = vec4(1.0,0.0,0.0,1.0);
     
     // finish ---------------
     gl_FragColor = fragColor;
