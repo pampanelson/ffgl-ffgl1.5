@@ -26,6 +26,7 @@
 /* Begin PBXBuildFile section */
 		602BD75120668B5900D035F9 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6DB1A3D1B9054A9007E6883 /* utilities.cpp */; };
 		80B0502A22E7FC6D006193CE /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6DB1A3D1B9054A9007E6883 /* utilities.cpp */; };
+		80FD003A22E9977C00892677 /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6DB1A3D1B9054A9007E6883 /* utilities.cpp */; };
 		A9952D7722B2A63100F4774D /* FFGLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6DB1A391B9054A9007E6883 /* FFGLShader.cpp */; };
 		A9F92E9D201A1C1500527E48 /* FFGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6DB1A2A1B9054A9007E6883 /* FFGL.cpp */; };
 		A9F92E9E201A1C1500527E48 /* FFGLPluginInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6DB1A311B9054A9007E6883 /* FFGLPluginInfo.cpp */; };
@@ -137,7 +138,7 @@
 		DB4B63E21FF8453A0069DA80 /* Add.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Add.h; path = ../../plugins/Add/Add.h; sourceTree = "<group>"; };
 		DB4B63E31FF8455E0069DA80 /* FFGLGradients.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FFGLGradients.cpp; sourceTree = "<group>"; };
 		DB4B63E41FF8455E0069DA80 /* FFGLGradients.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFGLGradients.h; sourceTree = "<group>"; };
-		DB4B63F41FF845820069DA80 /* Add.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Add.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB4B63F41FF845820069DA80 /* PMAdd.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMAdd.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB4B64161FF845920069DA80 /* Gradients.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Gradients.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		E89249CF19AD2CE80019503B /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -193,7 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				2FD1226B188540470009EBA8 /* PP3D0.bundle */,
-				DB4B63F41FF845820069DA80 /* Add.bundle */,
+				DB4B63F41FF845820069DA80 /* PMAdd.bundle */,
 				DB4B64161FF845920069DA80 /* Gradients.bundle */,
 				A9F92EA9201A1C1500527E48 /* Fireworks.bundle */,
 			);
@@ -411,7 +412,7 @@
 			);
 			name = Add;
 			productName = FFGLBrightness;
-			productReference = DB4B63F41FF845820069DA80 /* Add.bundle */;
+			productReference = DB4B63F41FF845820069DA80 /* PMAdd.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		DB4B64071FF845920069DA80 /* Gradients */ = {
@@ -532,6 +533,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80FD003A22E9977C00892677 /* utilities.cpp in Sources */,
 				DB4B63E81FF845820069DA80 /* FFGL.cpp in Sources */,
 				DB4B641D1FF84E910069DA80 /* Add.cpp in Sources */,
 				DB4B63E91FF845820069DA80 /* FFGLPluginInfo.cpp in Sources */,
@@ -719,7 +721,8 @@
 				INFOPLIST_FILE = "FFGLPlugin-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
 				PREBINDING = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lohosoft.PMAdd;
+				PRODUCT_NAME = PMAdd;
 				WRAPPER_EXTENSION = bundle;
 				ZERO_LINK = NO;
 			};
@@ -738,7 +741,8 @@
 				INFOPLIST_FILE = "FFGLPlugin-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
 				PREBINDING = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lohosoft.PMAdd;
+				PRODUCT_NAME = PMAdd;
 				WRAPPER_EXTENSION = bundle;
 				ZERO_LINK = NO;
 			};

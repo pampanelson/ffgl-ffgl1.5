@@ -41,17 +41,28 @@ uniform sampler2D textureDest;
 uniform sampler2D textureSrc;
 //the value defined by the slider to switch between the two images
 uniform float mixVal;
-
+uniform float ticks;
+uniform float width;
+uniform float height;
+float iTime;
 
 void main()
 {
+    
+    // name convert ---------------
+    vec4 fragColor;
+    iTime = ticks/1000.0;
+    vec2 iResolution = vec2(width,height);
+    vec2 fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
+    
+    
 	//get the two fragments to mix
 	vec4 colorDest = texture2D(textureDest, gl_TexCoord[0].st);
 	vec4 colorSrc = texture2D(textureSrc, gl_TexCoord[1].st);
 
 	//here we add the colorSrc r,g,b,a pixel value to the colorDest pixel value according to the mixVal value
 	vec4 mix = colorDest + colorSrc * mixVal;
-
+    
 	//Here we use the built-in function min(val1,val2) to get the minimum between val1 and val2 and always keep output pixel value between 0.0 and 1.0
 	gl_FragColor = min(mix, 1.0);
 }
@@ -95,6 +106,11 @@ FFResult Add::InitGL(const FFGLViewportStruct *vp)
 	m_inputTextureLocation2 = m_shader.FindUniform("textureSrc");
 	m_MixValLocation = m_shader.FindUniform("mixVal");
 
+    m_TicksLocation = m_shader.FindUniform("ticks");
+    m_WidthLocation = m_shader.FindUniform("width");
+    m_HeightLocation = m_shader.FindUniform("height");
+    
+    
 	//the 0 means that the 'inputTexture' in
 	//the shader will use the texture bound to GL texture unit 0
 	glUniform1i(m_inputTextureLocation1, 0);

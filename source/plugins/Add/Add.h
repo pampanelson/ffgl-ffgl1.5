@@ -46,4 +46,12 @@ protected:
 	GLint m_inputTextureLocation2;
 	GLint m_MixValLocation;
 
+    GLint m_TicksLocation;
+    
+    GLint m_WidthLocation;
+    GLint m_HeightLocation;
+    
+    double ticks;
+
+    
 };
