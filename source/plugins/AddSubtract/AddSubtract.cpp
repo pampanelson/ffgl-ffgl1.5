@@ -52,6 +52,9 @@ void main() {
     vec2 iResolution = vec2(width,height);
     vec2 fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
 
+    //vec4 color = texture2D(inputTexture,gl_TexCoord[0].st);
+
+    
     // ---------------
     fragColor = vec4(1.0,0.0,0.0,1.0);
     
@@ -59,12 +62,6 @@ void main() {
     gl_FragColor = fragColor;
     
 }
-//void main()
-//{
-//    //vec4 color = texture2D(inputTexture,gl_TexCoord[0].st);
-//    vec4 color = vec4(0.0,0.0,sin(ticks),1.0);
-//    gl_FragColor  =  color;
-//}
 );
 
 AddSubtract::AddSubtract()
