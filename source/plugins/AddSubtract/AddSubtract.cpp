@@ -14,8 +14,8 @@
 
 static CFFGLPluginInfo PluginInfo ( 
 	AddSubtract::CreateInstance,		// Create method
-	"PDemo190723",								// Plugin unique ID
-	"PampaDemo0",					// Plugin name
+	"P1907253d",								// Plugin unique ID
+	"PP3D0",					// Plugin name
 	1,						   			// API major version number 													
 	500,								// API minor version number
 	1,									// Plugin major version number
@@ -42,6 +42,18 @@ uniform float ticks;
 uniform float width;
 uniform float height;
 
+/**
+ * Part 3 Challenges
+ * - Make the camera move up and down while still pointing at the cube
+ * - Make the camera roll (stay looking at the cube, and don't change the eye point)
+ * - Make the camera zoom in and out
+ */
+                                                        
+const int MAX_MARCHING_STEPS = 255;
+const float MIN_DIST = 0.0;
+const float MAX_DIST = 100.0;
+const float EPSILON = 0.0001;
+                                                        
 
 
 void main() {
