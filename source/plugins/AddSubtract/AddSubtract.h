@@ -49,4 +49,7 @@ protected:
     GLint m_HeightLocation;
     
     double ticks;
+    
+    GLuint vertexbuffer;
+    GLuint vertexbuffer1;
 };
