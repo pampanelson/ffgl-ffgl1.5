@@ -14,7 +14,7 @@
 
 static CFFGLPluginInfo PluginInfo ( 
 	AddSubtract::CreateInstance,		// Create method
-	"PDemo190723",								// Plugin unique ID
+	"PDemo190726",								// Plugin unique ID
 	"PampaDemo0",					// Plugin name
 	1,						   			// API major version number 													
 	500,								// API minor version number
@@ -43,7 +43,6 @@ uniform float width;
 uniform float height;
 
 
-
 void main() {
     
     // name convert ---------------
@@ -52,12 +51,13 @@ void main() {
     vec2 iResolution = vec2(width,height);
     vec2 fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
 
-    //vec4 color = texture2D(inputTexture,gl_TexCoord[0].st);
-
     
     // ---------------
-    fragColor = vec4(1.0,0.0,0.0,1.0);
-    
+//    fragColor = vec4(sin(iTime)*vec2(fragCoord.xy/iResolution.xy),0.0,1.0);
+    fragColor = texture2D(inputTexture,gl_TexCoord[0].st);
+
+//    fragColor = vec4(1.0,0.0,0.0,1.0);
+
     // finish ---------------
     gl_FragColor = fragColor;
     
@@ -175,37 +175,83 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
     glUniform1f(m_WidthLocation, (float)viewport[2]);
     glUniform1f(m_HeightLocation, (float)viewport[3]);
 
+    //activate texture unit 1 and bind the input texture
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, Texture.Handle);
     
-	//activate texture unit 1 and bind the input texture
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, Texture.Handle);
     
-	//draw the quad that will be painted by the shader/textures
-	//note that we are sending texture coordinates to texture unit 1..
-	//the vertex shader and fragment shader refer to this when querying for
-	//texture coordinates of the inputTexture
-	glBegin(GL_QUADS);
+    
+    
+//    //draw the quad that will be painted by the shader/textures
+//    //note that we are sending texture coordinates to texture unit 1..
+//    //the vertex shader and fragment shader refer to this when querying for
+//    //texture coordinates of the inputTexture
+//    glBegin(GL_QUADS);
+//
+//    //lower left
+//    glMultiTexCoord2f(GL_TEXTURE0, 0,0);
+//    glVertex2f(-1,-1);
+//
+//    //upper left
+//    glMultiTexCoord2f(GL_TEXTURE0, 0, maxCoords.t);
+//    glVertex2f(-1,1);
+//
+//    //upper right
+//    glMultiTexCoord2f(GL_TEXTURE0, maxCoords.s, maxCoords.t);
+//    glVertex2f(1,1);
+//
+//    //lower right
+//    glMultiTexCoord2f(GL_TEXTURE0, maxCoords.s, 0);
+//    glVertex2f(1,-1);
+//    glEnd();
+//
+//    //unbind the input texture
+//    glBindTexture(GL_TEXTURE_2D,0);
 
-	//lower left
-	glMultiTexCoord2f(GL_TEXTURE0, 0,0);
-	glVertex2f(-1,-1);
-
-	//upper left
-	glMultiTexCoord2f(GL_TEXTURE0, 0, maxCoords.t);
-	glVertex2f(-1,1);
-
-	//upper right
-	glMultiTexCoord2f(GL_TEXTURE0, maxCoords.s, maxCoords.t);
-	glVertex2f(1,1);
-
-	//lower right
-	glMultiTexCoord2f(GL_TEXTURE0, maxCoords.s, 0);
-	glVertex2f(1,-1);
-	glEnd();
-
-	//unbind the input texture
-	glBindTexture(GL_TEXTURE_2D,0);
-
+    
+    
+    
+    // ----------------  full opengl function try -------------------------------
+    // An array of 3 vectors which represents 3 vertices
+    static const GLfloat g_vertex_buffer_data[] = {
+        -1.0f, -1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        0.0f,  1.0f, 0.0f,
+    };
+    
+    // This will identify our vertex buffer
+    GLuint vertexbuffer;
+    
+    // Generate 1 buffer, put the resulting identifier in vertexbuffer
+    glGenBuffers(1, &vertexbuffer);
+    
+    // The following commands will talk about our 'vertexbuffer' buffer
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    
+    // Give our vertices to OpenGL.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    
+    
+    // 1rst attribute buffer : vertices
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glVertexAttribPointer(
+                          0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+                          3,                  // size
+                          GL_FLOAT,           // type
+                          GL_FALSE,           // normalized?
+                          0,                  // stride
+                          (void*)0            // array buffer offset
+                          );
+    
+    // Draw the triangle !
+    glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+    glDisableVertexAttribArray(0);
+    
+    //===============================================================================
+    
+    
+    
 
 	//unbind the shader
 	m_shader.UnbindShader();

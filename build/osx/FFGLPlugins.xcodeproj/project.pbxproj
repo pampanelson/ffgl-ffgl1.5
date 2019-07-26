@@ -208,6 +208,20 @@
 			name = source;
 			sourceTree = "<group>";
 		};
+		80CE4FCA22EAA0EC001FB11E /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
+		80CE4FCB22EAA0F9001FB11E /* myutils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = myutils;
+			sourceTree = "<group>";
+		};
 		A91E037820173C1F0018E2D0 /* Gradients */ = {
 			isa = PBXGroup;
 			children = (
@@ -256,6 +270,8 @@
 		D69416A01B90436100D30319 /* AddSubtract */ = {
 			isa = PBXGroup;
 			children = (
+				80CE4FCB22EAA0F9001FB11E /* myutils */,
+				80CE4FCA22EAA0EC001FB11E /* shaders */,
 				D69416A21B90436100D30319 /* AddSubtract.h */,
 				D69416A11B90436100D30319 /* AddSubtract.cpp */,
 			);

@@ -138,3 +138,4 @@ float random ( float min, float max )
 
 
 
+// add more random and fucntion lib here ...................... TODO 
