@@ -29,8 +29,8 @@ static const std::string vertexShaderCode = STRINGIFY(
 void main()
 {
 	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-	gl_TexCoord[0] = gl_MultiTexCoord0;
-	gl_FrontColor = gl_Color;
+	//gl_TexCoord[0] = gl_MultiTexCoord0;
+	//gl_FrontColor = gl_Color;
 }
 );
 
@@ -54,9 +54,10 @@ void main() {
     
     // ---------------
 //    fragColor = vec4(sin(iTime)*vec2(fragCoord.xy/iResolution.xy),0.0,1.0);
-    fragColor = texture2D(inputTexture,gl_TexCoord[0].st);
+//    fragColor = texture2D(inputTexture,gl_TexCoord[0].st);
+    fragColor = texture2D(inputTexture,fragCoord.xy);
 
-//    fragColor = vec4(1.0,0.0,0.0,1.0);
+    fragColor = vec4(1.0,0.0,0.0,1.0);
 
     // finish ---------------
     gl_FragColor = fragColor;
@@ -115,7 +116,8 @@ FFResult AddSubtract::InitGL(const FFGLViewportStruct *vp)
 	//the 0 means that the 'inputTexture' in
 	//the shader will use the texture bound to GL texture unit 0
 	glUniform1i(m_inputTextureLocation, 0);
-	
+
+    
 	m_shader.UnbindShader();
 
   return FF_SUCCESS;
@@ -209,8 +211,6 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 //    glBindTexture(GL_TEXTURE_2D,0);
 
     
-    
-    
     // ----------------  full opengl function try -------------------------------
     // An array of 3 vectors which represents 3 vertices
     static const GLfloat g_vertex_buffer_data[] = {
@@ -229,7 +229,7 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     
     // Give our vertices to OpenGL.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STREAM_DRAW);
     
     
     // 1rst attribute buffer : vertices
@@ -251,8 +251,6 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
     //===============================================================================
     
     
-    
-
 	//unbind the shader
 	m_shader.UnbindShader();
 
