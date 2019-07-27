@@ -97,7 +97,7 @@
 		2FD1224618853D640009EBA8 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		2FD1224818853D700009EBA8 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		2FD1225318853FFB0009EBA8 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		2FD1226B188540470009EBA8 /* PampaDemo0.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PampaDemo0.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FD1226B188540470009EBA8 /* PFragTest0.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PFragTest0.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F28D5818B37D0C007D7C87 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A9F28D5A18B37D12007D7C87 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		A9F92E8C201A1B8900527E48 /* Plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Plugin.h; path = ../../../source/plugins/Fireworks/Plugin.h; sourceTree = "<group>"; };
@@ -192,7 +192,7 @@
 		2DA285A10AEE5E480030A4DD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2FD1226B188540470009EBA8 /* PampaDemo0.bundle */,
+				2FD1226B188540470009EBA8 /* PFragTest0.bundle */,
 				DB4B63F41FF845820069DA80 /* Add.bundle */,
 				DB4B64161FF845920069DA80 /* Gradients.bundle */,
 				A9F92EA9201A1C1500527E48 /* Fireworks.bundle */,
@@ -377,7 +377,7 @@
 			);
 			name = AddSubtract;
 			productName = FFGLBrightness;
-			productReference = 2FD1226B188540470009EBA8 /* PampaDemo0.bundle */;
+			productReference = 2FD1226B188540470009EBA8 /* PFragTest0.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		A9F92E9A201A1C1500527E48 /* Fireworks */ = {
@@ -624,7 +624,7 @@
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
 				PREBINDING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lohosoft.PFragTest0;
-				PRODUCT_NAME = PampaDemo0;
+				PRODUCT_NAME = PFragTest0;
 				WRAPPER_EXTENSION = bundle;
 				ZERO_LINK = NO;
 			};
@@ -644,7 +644,7 @@
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
 				PREBINDING = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lohosoft.PFragTest0;
-				PRODUCT_NAME = PampaDemo0;
+				PRODUCT_NAME = PFragTest0;
 				WRAPPER_EXTENSION = bundle;
 				ZERO_LINK = NO;
 			};
