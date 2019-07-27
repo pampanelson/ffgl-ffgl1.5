@@ -14,8 +14,8 @@
 
 static CFFGLPluginInfo PluginInfo ( 
 	AddSubtract::CreateInstance,		// Create method
-	"PDemo190723",								// Plugin unique ID
-	"PampaDemo0",					// Plugin name
+	"PFragTest0",								// Plugin unique ID
+	"PFragTest0",					// Plugin name
 	1,						   			// API major version number 													
 	500,								// API minor version number
 	1,									// Plugin major version number
