@@ -52,11 +52,11 @@ void main() {
     vec2 iResolution = vec2(width,height);
     vec2 fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
 
-    //vec4 color = texture2D(inputTexture,gl_TexCoord[0].st);
+    vec4 tex= texture2D(inputTexture,gl_TexCoord[0].st);
 
     
     // ---------------
-    fragColor = vec4(1.0,0.0,0.0,1.0);
+    fragColor = vec4(1.0,0.0,0.0,1.0)*tex;
     
     // finish ---------------
     gl_FragColor = fragColor;
