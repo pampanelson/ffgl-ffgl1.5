@@ -98,6 +98,8 @@
 		2FD1224818853D700009EBA8 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		2FD1225318853FFB0009EBA8 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		2FD1226B188540470009EBA8 /* PFragTest0.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PFragTest0.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		80FFEC2022EFBB42006634E1 /* Vertex0.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vertex0.h; sourceTree = "<group>"; };
+		80FFEC2122EFBCD9006634E1 /* Frag0.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Frag0.h; sourceTree = "<group>"; };
 		A9F28D5818B37D0C007D7C87 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A9F28D5A18B37D12007D7C87 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		A9F92E8C201A1B8900527E48 /* Plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Plugin.h; path = ../../../source/plugins/Fireworks/Plugin.h; sourceTree = "<group>"; };
@@ -258,6 +260,8 @@
 			children = (
 				D69416A21B90436100D30319 /* AddSubtract.h */,
 				D69416A11B90436100D30319 /* AddSubtract.cpp */,
+				80FFEC2022EFBB42006634E1 /* Vertex0.h */,
+				80FFEC2122EFBCD9006634E1 /* Frag0.h */,
 			);
 			name = AddSubtract;
 			path = ../../source/plugins/AddSubtract;

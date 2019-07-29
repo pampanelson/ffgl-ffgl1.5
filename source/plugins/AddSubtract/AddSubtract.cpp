@@ -2,6 +2,8 @@
 #include "FFGLLib.h"
 
 #include "AddSubtract.h"
+#include "Vertex0.h"
+#include "Frag0.h"
 #include "../../lib/ffgl/utilities/utilities.h"
 
 #define FFPARAM_BrightnessR  (0)
@@ -25,44 +27,8 @@ static CFFGLPluginInfo PluginInfo (
 	"by Pampa -- lohosoft.com"				// About
 );
 
-static const std::string vertexShaderCode = STRINGIFY(
-void main()
-{
-	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-	gl_TexCoord[0] = gl_MultiTexCoord0;
-	gl_FrontColor = gl_Color;
-}
-);
 
 
-static const std::string fragmentShaderCode = STRINGIFY(
-uniform sampler2D inputTexture;
-uniform vec3 brightness;
-uniform float ticks;
-uniform float width;
-uniform float height;
-
-
-
-void main() {
-    
-    // name convert ---------------
-    vec4 fragColor;
-    float iTime = ticks/1000.0;
-    vec2 iResolution = vec2(width,height);
-    vec2 fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
-
-    vec4 tex= texture2D(inputTexture,gl_TexCoord[0].st);
-
-    
-    // ---------------
-    fragColor = vec4(1.0,0.0,0.0,1.0)*tex;
-    
-    // finish ---------------
-    gl_FragColor = fragColor;
-    
-}
-);
 
 AddSubtract::AddSubtract()
 :CFreeFrameGLPlugin(),
