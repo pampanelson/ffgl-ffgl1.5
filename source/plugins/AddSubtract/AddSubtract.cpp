@@ -26,14 +26,14 @@ static CFFGLPluginInfo PluginInfo (
 );
 
 static const std::string vertexShaderCode = STRINGIFY(
-uniform sampler2D inputTexture;
+
 
 void main()
 {
 
 	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
     gl_TexCoord[0] = gl_MultiTexCoord0;
-    gl_FrontColor = texture2D(inputTexture,gl_Vertex.st);
+//    gl_FrontColor = texture2D(inputTexture,gl_Vertex.st);
     
 
 }
@@ -63,8 +63,8 @@ void main() {
 //    fragColor = texture2D(inputTexture,gl_TexCoord[0].st);
 //    fragColor = texture2D(inputTexture,gl_FragCoord.xy/iResolution.xy);
 //    fragColor = gl_FrontColor;
-    fragColor = vec4(1.0,0.0,0.0,1.0)*texture2D(inputTexture,gl_FragCoord.xy/iResolution.xy);
-    fragColor = gl_FrontColor;
+    fragColor = vec4(1.0,0.0,0.0,1.0);
+//    fragColor = gl_FrontColor;
     // finish ---------------
     gl_FragColor = fragColor;
     
@@ -229,9 +229,9 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
     // ----------------  full opengl function try -------------------------------
     // An array of 3 vectors which represents 3 vertices
     static const GLfloat g_vertex_buffer_data[] = {
-        -1.0f, -1.0f, 0.0f,1.0f,0.0f,
-        1.0f, -1.0f, 0.0f,1.0f,1.0f,
-        0.0f,  1.0f, 1.0f,0.0f,0.0f
+        -1.0f, -1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        0.0f,  1.0f, 1.0f,
     };
     
     
