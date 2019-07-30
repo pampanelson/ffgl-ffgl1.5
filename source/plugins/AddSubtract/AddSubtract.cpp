@@ -27,16 +27,23 @@ static CFFGLPluginInfo PluginInfo (
 
 static const std::string vertexShaderCode = STRINGIFY(
 
-
+//uniform sampler2D inputTexture;
 layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec2 aCoord;
+//varying vec4 vertColor;
+//varying vec2 vertCoord;
+//uniform float width;
+//uniform float height;
 void main()
 {
 
 //    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
     gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-    gl_TexCoord[0] = gl_MultiTexCoord0;
-//    gl_FrontColor = texture2D(inputTexture,gl_Vertex.st);
-    
+//    gl_Position = vec4(aCoord.x, aCoord.y, aPos.z, 1.0);
+//    gl_TexCoord[0] = gl_MultiTexCoord0;
+//    vertCoord = aCoord;
+//    vertColor = texture2D(inputTexture,aCoord.xy);
+//    vertCoord = aCoord;
 
 }
 );
@@ -49,7 +56,8 @@ uniform vec3 brightness;
 uniform float ticks;
 uniform float width;
 uniform float height;
-
+//varying vec2 vertCoord;
+//varying vec4 vertColor;
 
 void main() {
     
@@ -65,9 +73,12 @@ void main() {
 //    fragColor = texture2D(inputTexture,gl_TexCoord[0].st);
 //    fragColor = texture2D(inputTexture,gl_FragCoord.xy/iResolution.xy);
 //    fragColor = gl_FrontColor;
-//    fragColor = vec4(1.0,1.0,1.0,1.0)*texture2D(inputTexture,gl_FragCoord.xy/iResolution.xy);
+//    fragColor = texture2D(inputTexture,vertCoord);
+//    fragColor = texture2D(inputTexture,vertCood.xy);
     fragColor = vec4(1.0,0.0,0.0,1.0);
-//    fragColor = gl_FrontColor;
+    
+//    fragColor = vertColor;
+
     // finish ---------------
     gl_FragColor = fragColor;
     
@@ -187,14 +198,6 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
     glUniform1f(m_HeightLocation, (float)viewport[3]);
 
     
-    //activate texture unit 1 and bind the input texture
-
-    float texCoords[] = {
-        0.0f, 0.0f,  // lower-left corner
-        1.0f, 0.0f,  // lower-right corner
-        0.5f, 1.0f   // top-center corner
-    };
-    
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, Texture.Handle);
@@ -232,48 +235,67 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
     // ----------------  full opengl function try -------------------------------
     // An array of 3 vectors which represents 3 vertices
     static const GLfloat g_vertex_buffer_data[] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f,  1.0f, 1.0f,
+        -1.0f, 0.0f, 0.0f,0.0f,.5f,
+        1.0f, -.5f, 0.0f,-1.0f,-0.5f,
+        0.0f,  1.0f, 1.0f,0.5f,1.0f
     };
+//
+//    static const GLfloat g_vertex_buffer_data[] = {
+//        -1.0f, -1.0f, 0.0f,
+//        1.0f, -1.0f, 0.0f,
+//        0.0f,  1.0f, 1.0f
+//    };
+//
     
+    GLuint vao;
+    glGenVertexArraysAPPLE(1, &vao);
+
     
-    
-    // This will identify our vertex buffer
     GLuint vertexbuffer;
-    
-    // Generate 1 buffer, put the resulting identifier in vertexbuffer
     glGenBuffers(1, &vertexbuffer);
     
+    
+    glBindVertexArrayAPPLE(vao);
     // The following commands will talk about our 'vertexbuffer' buffer
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     
     // Give our vertices to OpenGL.
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-    
-    
-//    // 1rst attribute buffer : vertices
+
+    // need detail memo --------------------  TODO
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glVertexAttribPointer(
-                          0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-                          3,                  // size
-                          GL_FLOAT,           // type
-                          GL_FALSE,           // normalized?
-                          0,                  // stride
-                          (void*)0            // array buffer offset
-                          );
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GL_FLOAT), (GLvoid*)0);
 
-    // Draw the triangle !
-    glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
 
-    glDisableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GL_FLOAT), (GLvoid*)(3*sizeof(GL_FLOAT)));
+//
 //
     
+
+    // finaly draw --------------
+    glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+
+    
+    
+    // clean up
+    
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
+    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
+    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+    glBindVertexArrayAPPLE(0);
     
     
 	//unbind the shader
 	m_shader.UnbindShader();
+
+
+
 
 	return FF_SUCCESS;
 }
