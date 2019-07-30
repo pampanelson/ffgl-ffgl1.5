@@ -28,10 +28,12 @@ static CFFGLPluginInfo PluginInfo (
 static const std::string vertexShaderCode = STRINGIFY(
 
 
+layout (location = 0) in vec3 aPos;
 void main()
 {
 
-	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+//    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
     gl_TexCoord[0] = gl_MultiTexCoord0;
 //    gl_FrontColor = texture2D(inputTexture,gl_Vertex.st);
     
@@ -63,7 +65,8 @@ void main() {
 //    fragColor = texture2D(inputTexture,gl_TexCoord[0].st);
 //    fragColor = texture2D(inputTexture,gl_FragCoord.xy/iResolution.xy);
 //    fragColor = gl_FrontColor;
-    fragColor = vec4(1.0,1.0,1.0,1.0)*texture2D(inputTexture,gl_FragCoord.xy/iResolution.xy);
+//    fragColor = vec4(1.0,1.0,1.0,1.0)*texture2D(inputTexture,gl_FragCoord.xy/iResolution.xy);
+    fragColor = vec4(1.0,0.0,0.0,1.0);
 //    fragColor = gl_FrontColor;
     // finish ---------------
     gl_FragColor = fragColor;
