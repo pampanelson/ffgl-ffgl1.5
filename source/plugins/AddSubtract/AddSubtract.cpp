@@ -14,7 +14,7 @@
 
 static CFFGLPluginInfo PluginInfo ( 
 	AddSubtract::CreateInstance,		// Create method
-	"PDemo190726",								// Plugin unique ID
+	"PDemo190730",								// Plugin unique ID
 	"PampaDemo0",					// Plugin name
 	1,						   			// API major version number 													
 	500,								// API minor version number
@@ -63,7 +63,7 @@ void main() {
 //    fragColor = texture2D(inputTexture,gl_TexCoord[0].st);
 //    fragColor = texture2D(inputTexture,gl_FragCoord.xy/iResolution.xy);
 //    fragColor = gl_FrontColor;
-    fragColor = vec4(1.0,0.0,0.0,1.0);
+    fragColor = vec4(1.0,1.0,1.0,1.0)*texture2D(inputTexture,gl_FragCoord.xy/iResolution.xy);
 //    fragColor = gl_FrontColor;
     // finish ---------------
     gl_FragColor = fragColor;
@@ -202,27 +202,27 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
     //note that we are sending texture coordinates to texture unit 1..
     //the vertex shader and fragment shader refer to this when querying for
     //texture coordinates of the inputTexture
-    glBegin(GL_QUADS);
+//    glBegin(GL_QUADS);
+////
+////    //lower left
+//    glMultiTexCoord2f(GL_TEXTURE0, 0,0);
+//    glVertex2f(-1,-1);
 //
-//    //lower left
-    glMultiTexCoord2f(GL_TEXTURE0, 0,0);
-    glVertex2f(-1,-1);
-
-    //upper left
-    glMultiTexCoord2f(GL_TEXTURE0, 0, maxCoords.t);
-    glVertex2f(-1,1);
-
-    //upper right
-    glMultiTexCoord2f(GL_TEXTURE0, maxCoords.s, maxCoords.t);
-    glVertex2f(1,1);
-
-    //lower right
-    glMultiTexCoord2f(GL_TEXTURE0, maxCoords.s, 0);
-    glVertex2f(1,-1);
-    glEnd();
+//    //upper left
+//    glMultiTexCoord2f(GL_TEXTURE0, 0, maxCoords.t);
+//    glVertex2f(-1,1);
 //
+//    //upper right
+//    glMultiTexCoord2f(GL_TEXTURE0, maxCoords.s, maxCoords.t);
+//    glVertex2f(1,1);
+//
+//    //lower right
+//    glMultiTexCoord2f(GL_TEXTURE0, maxCoords.s, 0);
+//    glVertex2f(1,-1);
+//    glEnd();
+////
 //    //unbind the input texture
-    glBindTexture(GL_TEXTURE_2D,0);
+//    glBindTexture(GL_TEXTURE_2D,0);
 
     // TODO .................. enable and disable once is ok ????
 
@@ -274,7 +274,7 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 
 	return FF_SUCCESS;
 }
-
+    
 float AddSubtract::GetFloatParameter(unsigned int dwIndex)
 {
 	float retValue = 0.0;

@@ -50,6 +50,5 @@ protected:
     
     double ticks;
     
-    GLuint vertexbuffer;
-    GLuint vertexbuffer1;
+
 };
