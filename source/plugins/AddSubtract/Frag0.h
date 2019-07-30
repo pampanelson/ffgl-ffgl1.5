@@ -13,7 +13,7 @@ uniform vec3 brightness;
 uniform float ticks;
 uniform float width;
 uniform float height;
-
+float iTime;
 
 varying float gray;
 varying float a[4];
@@ -21,7 +21,7 @@ void main() {
     
     // name convert ---------------
     vec4 fragColor;
-    float iTime = ticks/1000.0;
+    iTime = ticks/1000.0;
     vec2 iResolution = vec2(width,height);
     vec2 fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
     
@@ -33,6 +33,7 @@ void main() {
     
     fragColor = vec4(gray);
     fragColor = vec4(a[0],a[1],a[2],a[3]);
+    fragColor = vec4(vec3(sin(iTime)),1.0);
     // finish ---------------
     gl_FragColor = fragColor;
     
