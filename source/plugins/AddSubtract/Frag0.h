@@ -19,15 +19,24 @@ uniform float switchTex;
                                                         
 uniform float float1;
 
-                                                        
-mat2 myrotate(float theta) {
-    float c = cos(theta);
-    float s = sin(theta);
-    return mat2(
-                vec2(c, -s),
-                vec2(s, c)
-                );
+const float TWO_PI = 6.28318530718;
+const int steps = 36;
+const float brighten = 1.;
+
+float map(float value, float low1, float high1, float low2, float high2) {
+    return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
 }
+
+float triangle(vec2 p, float size) {
+    vec2 q = abs(p);
+    return max(q.x * 0.866025 + p.y * 0.5, -p.y * 0.5) - size * 0.5;
+}
+
+float hexagon(vec2 p, float radius) {
+    vec2 q = abs(p);
+    return max(abs(q.y), q.x * 0.866025 + q.y * 0.5) - radius;
+}
+
 
 
 void main()
@@ -45,34 +54,28 @@ void main()
     float fft = float1;
 
     
-    // set position
-    vec2 v = iResolution.xy;
-    vec2 p = fragCoord.xy;
-    p = (p-v*.5) / v.y;
-    p *= myrotate(iTime);
-    float r = length(p);
-     //breathing effect
-    p += p * sin(dot(p, p)*20.-iTime) * .04;
+    float time = iTime * 2.;
+    vec2 st = (2. * fragCoord.xy - iResolution.xy) / iResolution.y;
+    st -= vec2(0, 0.3); // offset overall y a bit for more "floor"
     
-     //accumulate color
-    vec4 c = vec4(0.);
-    for (float i = .5 ; i < 8. ; i++){
-
-        // fractal formula and rotation
-        p = abs(2.*fract(p-.5)-1.)*mat2(cos(.01*(iTime * 2.7 + fft*10.)*i*i + .78*vec4(1,7,3,1)));
-
-        // coloration
-        c += exp(-abs(p.y)*5.) * (cos(vec4(20.,30.,2.,20.)*i)*0.9+0.15) * .5;
-        c += exp(-abs(p.x)*5.) * (cos(vec4(2,3,1,0)*i)*.5+.5) * .5;
-
-    };
-
-    // palette
-    c.rg *= .5;
-
+    // start white and head towards black as triangles shrink
+    float col = 1.;
+    float sizeStart = 5. + cos(time);
+    float sizeEnd = 0.;
+    float stepSize = sizeStart / float(steps);
+    for(int i = 0; i < steps; i++) {
+        float curStepSize = float(i) * stepSize;
+        float stepColor = map(curStepSize, sizeStart, sizeEnd, 1., 0.05);
+        float yCompensate = float(i) * -0.22; // triangle isn't centered, so we can offset for better concentricity
+        float offset = fft * sin(iTime);
+        vec2 stMoved = offset + st + 0.2 * vec2(0, yCompensate + sin(float(i) * 0.25 + time * 3.)); // offset wobble y down the tunnel, 3x faster than main oscillation
+        if(hexagon(stMoved, curStepSize) > 0.) {
+            col = stepColor;
+        }
+    }
+    fragColor = vec4(vec3(col * brighten), 1.0);
     
     
-    fragColor = c;
     
 //    fragColor = vec4(1.0);
     gl_FragColor = fragColor;
