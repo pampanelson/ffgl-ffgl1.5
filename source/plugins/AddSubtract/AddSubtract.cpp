@@ -6,10 +6,10 @@
 #include "Frag0.h"
 #include "../../lib/ffgl/utilities/utilities.h"
 
-#define FFPARAM_BrightnessR  (0)
-#define FFPARAM_BrightnessG	 (1)
-#define FFPARAM_BrightnessB	 (2)
 
+
+#define FFPARAM_SwitchTex   (0)
+#define FFPARAM_Float1      (1)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Plugin information
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,22 +33,18 @@ static CFFGLPluginInfo PluginInfo (
 AddSubtract::AddSubtract()
 :CFreeFrameGLPlugin(),
  m_initResources(1),
- m_inputTextureLocation(-1),
- m_BrightnessLocation(-1)
-{
+ m_inputTextureLocation(-1){
 	// Input properties
 	SetMinInputs(1);
 	SetMaxInputs(1);
 
 	// Parameters
-	SetParamInfo(FFPARAM_BrightnessR, "R", FF_TYPE_RED, 0.5f);
-	m_BrightnessR = 0.5f;
-
-	SetParamInfo(FFPARAM_BrightnessG, "G", FF_TYPE_GREEN, 0.5f);
-	m_BrightnessG = 0.5f;
+	SetParamInfo(FFPARAM_SwitchTex, "Switch Tex", FF_TYPE_BOOLEAN, false);
 	
-	SetParamInfo(FFPARAM_BrightnessB, "B", FF_TYPE_BLUE, 0.5f);
-	m_BrightnessB = 0.5f;
+    m_SwitchTex = false;
+	
+    SetParamInfo(FFPARAM_Float1,"Float 1",FF_TYPE_STANDARD,0.0f);
+    m_Float1 = 0.0f;
 
 }
 
@@ -73,10 +69,11 @@ FFResult AddSubtract::InitGL(const FFGLViewportStruct *vp)
 	//the "location" of each value.. then call one of the glUniform* methods
 	//to assign a value
 	m_inputTextureLocation = m_shader.FindUniform("inputTexture");
-	m_BrightnessLocation = m_shader.FindUniform("brightness");
     m_TicksLocation = m_shader.FindUniform("ticks");
     m_WidthLocation = m_shader.FindUniform("width");
     m_HeightLocation = m_shader.FindUniform("height");
+    m_SwitchTexLocation = m_shader.FindUniform("switchTex");
+    m_Float1Location = m_shader.FindUniform("float1");
     
 	//the 0 means that the 'inputTexture' in
 	//the shader will use the texture bound to GL texture unit 0
@@ -125,14 +122,7 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
     GLint viewport[4];
     glGetIntegerv( GL_VIEWPORT, viewport );
     
-    
-	//assign the Brightness
-	glUniform3f(m_BrightnessLocation,
-				-1.0f + (m_BrightnessR * 2.0f),
-				-1.0f + (m_BrightnessG * 2.0f),
-				-1.0f + (m_BrightnessB * 2.0f)
-				);
-	
+
 
     // assign ticks in millisecond
     glUniform1f(m_TicksLocation,ticks);
@@ -141,6 +131,17 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
     glUniform1f(m_WidthLocation, (float)viewport[2]);
     glUniform1f(m_HeightLocation, (float)viewport[3]);
 
+    glUniform1f(m_Float1Location, m_Float1);
+    
+    if(m_SwitchTex){
+        glUniform1f(m_SwitchTexLocation,1.0);
+
+    }else{
+        glUniform1f(m_SwitchTexLocation,0.0);
+
+    }
+    
+    
     
 	//activate texture unit 1 and bind the input texture
 	glActiveTexture(GL_TEXTURE0);
@@ -185,15 +186,12 @@ float AddSubtract::GetFloatParameter(unsigned int dwIndex)
 
 	switch (dwIndex)
 	{
-	case FFPARAM_BrightnessR:
-		retValue = m_BrightnessR;
-		return retValue;
-	case FFPARAM_BrightnessG:
-		retValue = m_BrightnessG;
-		return retValue;
-	case FFPARAM_BrightnessB:
-		retValue = m_BrightnessB;
-		return retValue;
+    case FFPARAM_SwitchTex:
+        retValue = m_SwitchTex;
+        return retValue;
+    case FFPARAM_Float1:
+        retValue = m_Float1;
+        return retValue;
 	default:
 		return retValue;
 	}
@@ -203,15 +201,12 @@ FFResult AddSubtract::SetFloatParameter(unsigned int dwIndex, float value)
 {
 	switch (dwIndex)
 	{
-	case FFPARAM_BrightnessR:
-		m_BrightnessR = value;
-		break;
-	case FFPARAM_BrightnessG:
-		m_BrightnessG = value;
-		break;
-	case FFPARAM_BrightnessB:
-		m_BrightnessB = value;
-		break;
+    case FFPARAM_Float1:
+        m_Float1 = value;
+        break;
+    case FFPARAM_SwitchTex:
+        m_SwitchTex = value > 0.5;
+        break;
 	default:
 		return FF_FAIL;
 	}

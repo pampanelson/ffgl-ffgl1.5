@@ -9,14 +9,15 @@
 
 static const std::string fragmentShaderCode = STRINGIFY(
 uniform sampler2D inputTexture;
-uniform vec3 brightness;
 uniform float ticks;
 uniform float width;
 uniform float height;
 float iTime;
 
-varying float gray;
-varying float a[4];
+
+uniform float switchTex;
+                                                        
+uniform float float1;
 void main() {
     
     // name convert ---------------
@@ -25,15 +26,19 @@ void main() {
     vec2 iResolution = vec2(width,height);
     vec2 fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
     
-    vec4 tex= texture2D(inputTexture,gl_TexCoord[0].st);
     
+    if(switchTex>0.0){
+        vec4 tex= texture2D(inputTexture,gl_TexCoord[0].st);
+        fragColor = vec4(1.0,0.0,0.0,1.0)*tex;
+
+
+    }else{
+
+        fragColor = vec4(vec3(sin(iTime)*float1),1.0);
+    }
+
     
-    // ---------------
-    fragColor = vec4(1.0,0.0,0.0,1.0)*tex;
-    
-    fragColor = vec4(gray);
-    fragColor = vec4(a[0],a[1],a[2],a[3]);
-    fragColor = vec4(vec3(sin(iTime)),1.0);
+
     // finish ---------------
     gl_FragColor = fragColor;
     

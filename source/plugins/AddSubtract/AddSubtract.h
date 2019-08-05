@@ -15,7 +15,8 @@ public:
 	///////////////////////////////////////////////////
 	
 	FFResult SetFloatParameter(unsigned int dwIndex, float value) override;		
-	float GetFloatParameter(unsigned int index) override;					
+	float GetFloatParameter(unsigned int index) override;
+
 	FFResult ProcessOpenGL(ProcessOpenGLStruct* pGL) override;
 	FFResult InitGL(const FFGLViewportStruct *vp) override;
 	FFResult DeInitGL() override;
@@ -35,18 +36,21 @@ public:
 
 protected:	
 	// Parameters
-	float m_BrightnessR;
-	float m_BrightnessG;
-	float m_BrightnessB;
-	int m_initResources;
 
+	int m_initResources;
+    bool  m_SwitchTex;
+    float m_Float1;
+    
     FFGLShader m_shader;
 	GLint m_inputTextureLocation;
-	GLint m_BrightnessLocation;
     GLint m_TicksLocation;
     
     GLint m_WidthLocation;
     GLint m_HeightLocation;
+    
+    
+    GLint m_SwitchTexLocation;
+    GLint m_Float1Location;
     
     double ticks;
 };
