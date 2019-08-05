@@ -33,8 +33,12 @@ void main() {
 
 
     }else{
+        if(fragCoord.x/iResolution.x > float1){
+            fragColor = vec4(vec3(sin(iTime)),1.0);
 
-        fragColor = vec4(vec3(sin(iTime)*float1),1.0);
+        }else{
+            fragColor = vec4(vec3(0.0),1.0);
+        }
     }
 
     
