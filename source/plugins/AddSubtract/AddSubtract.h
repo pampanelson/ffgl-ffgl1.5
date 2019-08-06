@@ -34,19 +34,23 @@ public:
 
 
 protected:	
-	// Parameters
-	float m_BrightnessR;
-	float m_BrightnessG;
-	float m_BrightnessB;
-	int m_initResources;
-
+	
+    // Parameters
+    
+    int m_initResources;
+    bool  m_SwitchTex;
+    float m_Float1;
+    
     FFGLShader m_shader;
-	GLint m_inputTextureLocation;
-	GLint m_BrightnessLocation;
+    GLint m_inputTextureLocation;
     GLint m_TicksLocation;
     
     GLint m_WidthLocation;
     GLint m_HeightLocation;
+    
+    
+    GLint m_SwitchTexLocation;
+    GLint m_Float1Location;
     
     double ticks;
 };

@@ -14,9 +14,11 @@ uniform float ticks;
 uniform float width;
 uniform float height;
 float iTime;
+vec2 iResolution;
+vec2 fragCoord;
+uniform float switchTex;
 
-                                                        
-                                                        
+uniform float float1;
 
 const int MAX_MARCHING_STEPS = 255;
 const float MIN_DIST = 0.0;
