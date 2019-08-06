@@ -16,8 +16,8 @@
 
 static CFFGLPluginInfo PluginInfo ( 
 	AddSubtract::CreateInstance,		// Create method
-	"PFragTest2",								// Plugin unique ID
-	"PFragTest2",					// Plugin name
+	"PDemo3DCube",								// Plugin unique ID
+	"PDemo3DCube",					// Plugin name
 	1,						   			// API major version number 													
 	500,								// API minor version number
 	1,									// Plugin major version number
