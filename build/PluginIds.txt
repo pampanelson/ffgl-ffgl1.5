@@ -1,5 +1,5 @@
 -----Effects-----
-PDemo3DCube              PDemo3DCube
+P3DCube              P3DCube
 
 
 

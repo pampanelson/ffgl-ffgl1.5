@@ -97,7 +97,7 @@
 		2FD1224618853D640009EBA8 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		2FD1224818853D700009EBA8 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		2FD1225318853FFB0009EBA8 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		2FD1226B188540470009EBA8 /* PDemo3DCube.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PDemo3DCube.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FD1226B188540470009EBA8 /* P3DCube.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = P3DCube.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		80FFEC2022EFBB42006634E1 /* Vertex0.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vertex0.h; sourceTree = "<group>"; };
 		80FFEC2122EFBCD9006634E1 /* Frag0.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Frag0.h; sourceTree = "<group>"; };
 		A9F28D5818B37D0C007D7C87 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -194,7 +194,7 @@
 		2DA285A10AEE5E480030A4DD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2FD1226B188540470009EBA8 /* PDemo3DCube.bundle */,
+				2FD1226B188540470009EBA8 /* P3DCube.bundle */,
 				DB4B63F41FF845820069DA80 /* Add.bundle */,
 				DB4B64161FF845920069DA80 /* Gradients.bundle */,
 				A9F92EA9201A1C1500527E48 /* Fireworks.bundle */,
@@ -381,7 +381,7 @@
 			);
 			name = AddSubtract;
 			productName = FFGLBrightness;
-			productReference = 2FD1226B188540470009EBA8 /* PDemo3DCube.bundle */;
+			productReference = 2FD1226B188540470009EBA8 /* P3DCube.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		A9F92E9A201A1C1500527E48 /* Fireworks */ = {
@@ -627,8 +627,8 @@
 				INFOPLIST_FILE = "FFGLPlugin-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
 				PREBINDING = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lohosoft.PDemo3DCube;
-				PRODUCT_NAME = PDemo3DCube;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lohosoft.P3DCube;
+				PRODUCT_NAME = P3DCube;
 				WRAPPER_EXTENSION = bundle;
 				ZERO_LINK = NO;
 			};
@@ -647,8 +647,8 @@
 				INFOPLIST_FILE = "FFGLPlugin-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
 				PREBINDING = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lohosoft.PDemo3DCube;
-				PRODUCT_NAME = PDemo3DCube;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lohosoft.P3DCube;
+				PRODUCT_NAME = P3DCube;
 				WRAPPER_EXTENSION = bundle;
 				ZERO_LINK = NO;
 			};
