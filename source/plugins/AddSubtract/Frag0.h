@@ -20,10 +20,13 @@ uniform float switchTex;
 uniform float float1;
 
 const float PI = 3.1415926535;
-const float kArcLen = 0.0008;
-const int num = 100;
+const float kArcLen = 0.0006;
+const int num = 60;
 float radius = 10000.;
-const float squareWidith = 0.02;
+const float squareWidith = 0.01;
+const int  letterCol = 6;
+const float colGap = 0.1;
+                                                        
 mat2 rotate(float rot){
     rot = (rot/360.0) * 2.0 * PI;
     return mat2(cos(rot), -sin(rot), sin(rot), cos(rot));
@@ -70,31 +73,29 @@ void main()
     vec3 col = vec3(0.0); // white as default , multiply by later on
     //col += ball(uv,vec2(0.0,0.0),.1);
     //col += square(uv,vec2(0.0,0.0),.05,45.);
+    
     uv.y += radius;// move down along y axis
-    float theta = 360.0 * kArcLen/(radius * 2.0 * PI);
-    for(int i = 0;i<num;i++){
-        float theta1 = theta * float(i);
-        float x = sin(theta1)*radius;
-        float y = cos(theta1)*radius;
-        vec2 pos = vec2(x,y);
-        col += square(uv,pos,squareWidith,theta1);
-        pos.x *= -1.0;
-        col += square(uv,pos,squareWidith,theta1);
+
+    for(int j = 0;j < letterCol ;j++){
+        uv.y += float(j) * colGap;// move down along y axis by a gap between columns
+        float theta = 360.0 * kArcLen/(radius * 2.0 * PI);
+        for(int i = 0;i<num;i++){
+            float theta1 = theta * float(i);
+            float x = sin(theta1)*radius;
+            float y = cos(theta1)*radius;
+            vec2 pos = vec2(x,y);
+            col += square(uv,pos,squareWidith,theta1);
+            pos.x *= -1.0;
+            col += square(uv,pos,squareWidith,theta1);
+            
+        }
+        
         
     }
+
+
     
-    uv.y += 2.1 * squareWidith;
     
-    for(int i = 0;i<num;i++){
-        float theta1 = theta * float(i);
-        float x = sin(theta1)*radius;
-        float y = cos(theta1)*radius;
-        vec2 pos = vec2(x,y);
-        col += square(uv,pos,squareWidith,theta1);
-        pos.x *= -1.0;
-        col += square(uv,pos,squareWidith,theta1);
-        
-    }
     
     // Output to screen
     fragColor = vec4(col,1.0);
