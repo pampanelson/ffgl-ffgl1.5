@@ -61,7 +61,6 @@ void main()
 
 //    vec2 uv = fragCoord.xy / iResolution.xy;
     
-
     vec3 col;
     
     vec2 uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
@@ -77,13 +76,23 @@ void main()
     
     //float wave = -(sin(st.y*0.05*iTime) + 1.0)*0.5;
     float index = floor(st1.y * lineNum);
-    
-    // not use yet ---------------------------------------------------
     //float wave = sin(0.0008*iTime*index)*sin(index);
+    
+    
     //st1.y += wave;
     
     float f = fract(st1.y * lineNum);
-    f += 0.03*sin(0.0001*iTime*index*index*index);
+    
+    // ripples -----------------------------
+    float wave = sin(0.02*iTime*index*4.0*PI);
+    //f += 0.06*clamp(0.2,0.8,wave);
+    //wave = max(0.1,wave);
+    f += 0.05 * wave;
+    
+    //------------------------------------------
+    
+    
+    
     float line = smtLine(lineWidith,f);
     col = vec3(line);
     
@@ -96,12 +105,52 @@ void main()
     }
     
 
+
     // Output to screen
     fragColor = vec4(col,1.0);
     
     gl_FragColor = fragColor;
 }
 );
+
+
+// ================================    2.1
+
+//vec3 col;
+//
+//vec2 uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
+//uv.y += 0.5;
+////vec2 uv = fragCoord.xy/iResolution.xy;
+//vec2 st = vec2(atan(uv.x,uv.y),length(uv));
+//st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
+//
+//
+//// if(st1.x >= 0.25 && st.x <= 0.75){
+//
+//vec2 st1 = st;
+//
+////float wave = -(sin(st.y*0.05*iTime) + 1.0)*0.5;
+//float index = floor(st1.y * lineNum);
+//
+//// not use yet ---------------------------------------------------
+////float wave = sin(0.0008*iTime*index)*sin(index);
+////st1.y += wave;
+//
+//float f = fract(st1.y * lineNum);
+//f += 0.03*sin(0.0001*iTime*index*index*index);
+//float line = smtLine(lineWidith,f);
+//col = vec3(line);
+//
+//
+////}
+//
+//
+//if(st.y <= offsetY){
+//    col *= 0.0;
+//}
+//
+//
+
 
 
 // ================================    2.0
