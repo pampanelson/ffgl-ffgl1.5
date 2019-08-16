@@ -20,33 +20,32 @@ uniform float switchTex;
 uniform float float1;
 
 const float PI = 3.1415926535;
-const float kArcLen = 0.0006;
-const int num = 60;
+const float kArcLen = 0.0004;
+const int num = 100;
 float radius = 10000.;
 const float squareWidith = 0.01;
-const int  letterCol = 6;
-const float colGap = 0.1;
+
+float lineNum = 80.0;
+float lineGap = 0.03;
+float lineWidith = 0.3;
+float offsetY = 0.2;
+float lineSaturation = 4.0;
+float cheapstep(float x)
+{
+    x = 1.0 - x*x;    // MAD
+    x = 1.0 - x*x;    // MAD
+    return x;
+}
                                                         
-mat2 rotate(float rot){
-    rot = (rot/360.0) * 2.0 * PI;
-    return mat2(cos(rot), -sin(rot), sin(rot), cos(rot));
-}
-float ball(vec2 uv,vec2 p,float r){
-    if(length(uv-p)<r){
-        return 1.0;
-    }
-    return 0.0;
-    
+
+float smtLine(float lineWidith,float f){
+    float res;
+    res = smoothstep(lineWidith,0.0,f);
+    res *= smoothstep(0.0,lineWidith,f)*lineSaturation;
+    return res;
 }
 
-float square(vec2 uv,vec2 p,float width,float rot){
-    uv *= rotate(rot);
-    if(abs(uv.x-p.x)<width && abs(uv.y - p.y)<width){
-        return 1.0;
-    }
-    return 0.0;
-}
-
+                                                        
 
 
 void main()
@@ -60,40 +59,30 @@ void main()
     fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
     
 
-    vec2 uv = fragCoord.xy / iResolution.xy;
+//    vec2 uv = fragCoord.xy / iResolution.xy;
     
-    float wave = (sin(iTime)+1.0)*0.5;
-    radius *= wave;
-    uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
-    //vec2 uv = fragCoord.xy/iResolution.xy;
-    //vec2 st = vec2(atan(uv.x,uv.y),length(uv));
-    //st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
-    //0.0 and 1.0 locate on -y axis direction
-    
-    vec3 col = vec3(0.0); // white as default , multiply by later on
-    //col += ball(uv,vec2(0.0,0.0),.1);
-    //col += square(uv,vec2(0.0,0.0),.05,45.);
-    
-    uv.y += radius;// move down along y axis
 
-    for(int j = 0;j < letterCol ;j++){
-        uv.y += float(j) * colGap;// move down along y axis by a gap between columns
-        float theta = 360.0 * kArcLen/(radius * 2.0 * PI);
-        for(int i = 0;i<num;i++){
-            float theta1 = theta * float(i);
-            float x = sin(theta1)*radius;
-            float y = cos(theta1)*radius;
-            vec2 pos = vec2(x,y);
-            col += square(uv,pos,squareWidith,theta1);
-            pos.x *= -1.0;
-            col += square(uv,pos,squareWidith,theta1);
-            
-        }
+    vec3 col;
+    
+    vec2 uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
+    uv.y += 0.5;
+    //vec2 uv = fragCoord.xy/iResolution.xy;
+    vec2 st = vec2(atan(uv.x,uv.y),length(uv));
+    st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
+    
+    st.y += sin(iTime);
+    if(st.x >= 0.25 && st.x <= 0.75){
+        float f = fract(st.y * lineNum);
+        float line = smtLine(lineWidith,f);
+        col = vec3(line);
         
         
     }
-
-
+    
+    
+    if(st.y <= offsetY){
+        col *= 0.0;
+    }
     
     
     
@@ -106,3 +95,46 @@ void main()
     gl_FragColor = fragColor;
 }
 );
+
+
+
+// =======================================================
+//    float wave = (sin(iTime)+1.0)*0.5;
+//    float wave = fract(iTime);
+//    radius *= wave;
+//    uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
+//    //vec2 uv = fragCoord.xy/iResolution.xy;
+//    //vec2 st = vec2(atan(uv.x,uv.y),length(uv));
+//    //st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
+//    //0.0 and 1.0 locate on -y axis direction
+//
+//    vec3 col = vec3(0.0); // white as default , multiply by later on
+//    //col += ball(uv,vec2(0.0,0.0),.1);
+//    //col += square(uv,vec2(0.0,0.0),.05,45.);
+//
+//    uv.y += radius - 0.5;// move down along y axis
+//
+//    for(int j = 0;j < letterCol ;j++){
+//        uv.y += colGap;// move down along y axis by a gap between columns
+//        float theta = 360.0 * kArcLen/(radius * 2.0 * PI);
+//        for(int i = 0;i<num;i++){
+//            float theta1 = theta * float(i);
+//            float x = sin(theta1)*radius;
+//            float y = cos(theta1)*radius;
+//
+////            float x = 0.0001*radius;
+////            float y = 0.0001*radius;
+//
+//
+//            vec2 pos = vec2(x,y);
+//            col += square(uv,pos,squareWidith,theta1);
+//            pos.x *= -1.0;
+//            col += square(uv,pos,squareWidith,theta1);
+//
+//        }
+//
+//
+//    }
+//
+
+
