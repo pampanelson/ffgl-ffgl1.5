@@ -20,33 +20,38 @@ uniform float switchTex;
 uniform float float1;
 
 const float PI = 3.1415926535;
-const float kArcLen = 0.0004;
-const int num = 100;
-float radius = 10000.;
-const float squareWidith = 0.01;
-
-float lineNum = 80.0;
+float lineNumF = 80.0;
+int lineNumI = 80;
 float lineGap = 0.03;
-float lineWidith = 0.3;
+float lineWidith = 0.005;
 float offsetY = 0.2;
-float lineSaturation = 4.0;
-float cheapstep(float x)
-{
-    x = 1.0 - x*x;    // MAD
-    x = 1.0 - x*x;    // MAD
+
+
+// Polynomial smooth min (for copying and pasting into your shaders)
+float smin(float a, float b, float k) {
+    float h = clamp(0.5 + 0.5*(a-b)/k, 0.0, 1.0);
+    return mix(a, b, h) - k*h*(1.0-h);
+}
+
+float smax(float a,float b,float k){
+    return smin(a,b,-k);
+}
+
+float wave1(float x){
     return x;
 }
-                                                        
-
-float smtLine(float lineWidith,float f){
-    float res;
-    res = smoothstep(lineWidith,0.0,f);
-    res *= smoothstep(0.0,lineWidith,f)*lineSaturation;
+float wave2(float x,float amplitude,float freq){
+    float res = 0.0;
+    
+    res = amplitude - pow(x*freq,2.0);
     return res;
 }
-
-                                                        
-
+// peak is highest point , narrow is wave wide
+float wave3(float x,float peak,float narrow){
+    float res = 0.0;
+    res = peak - narrow*abs(x*x*x);
+    return res;
+}
 
 void main()
 {
@@ -62,49 +67,74 @@ void main()
 //    vec2 uv = fragCoord.xy / iResolution.xy;
     
     vec3 col;
-    
-    vec2 uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
-    uv.y += 0.5;
-    //vec2 uv = fragCoord.xy/iResolution.xy;
-    vec2 st = vec2(atan(uv.x,uv.y),length(uv));
-    st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
-    
-    
-    // if(st1.x >= 0.25 && st.x <= 0.75){
-    
-    vec2 st1 = st;
-    
-    //float wave = -(sin(st.y*0.05*iTime) + 1.0)*0.5;
-    float index = floor(st1.y * lineNum);
-    //float wave = sin(0.0008*iTime*index)*sin(index);
-    
-    
-    //st1.y += wave;
-    
-    float f = fract(st1.y * lineNum);
-    
-    // ripples -----------------------------
-    float wave = sin(0.02*iTime*index*4.0*PI);
-    //f += 0.06*clamp(0.2,0.8,wave);
-    //wave = max(0.1,wave);
-    f += 0.05 * wave;
-    
-    //------------------------------------------
-    
-    
-    
-    float line = smtLine(lineWidith,f);
-    col = vec3(line);
-    
-    
-    //}
-    
-    
-    if(st.y <= offsetY){
-        col *= 0.0;
-    }
-    
 
+    vec2 uv = (fragCoord.xy - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
+    uv *= 2.0; // -1. ~ 1.
+    uv.y += 1.0;
+    
+    vec2 st = vec2(atan(uv.x,uv.y),length(uv));
+    st.x *= 1.5;
+    //st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
+    
+    
+    // if(st.y < y){
+    //     col += smoothstep(0.0,.01,st.y);
+    // }
+    // if(st.y < y - lineWidith){
+    //     col *= smoothstep(0.001,0.0,st.y);
+    // }
+    vec2 st1 = st;
+////    float index = floor(st1.y * lineNumF);
+//    float gap = 4.0/lineNumF;
+////    for(int j = 0;j<6;j++){ // test for 6 detection point
+////        for(float i = 0.0; i < lineNumF; i++){
+//          //  float r = y + 1.0 * i * gap;
+//    float r = y;
+//            float line = 1.0 - smoothstep(0.0,lineWidith,abs(st.y - r));
+//            col += vec3(line);
+////        }
+////    }
+////    col = vec3(1.0);
+//
+    
+    for (int i = 0;i<6;i++){
+        float x = st.x;
+        x *= .2;
+        x -= fract(iTime*0.1);
+        // float x = uv.x;
+        float y = 0.0;
+        float a1 = -.2*sin(iTime*5.0);
+        float f1 = 12.5;
+        float y1 = wave2(x,a1,f1);
+        float a2 = 0.0;//
+        a2 = sin(iTime*10.)*0.1;
+        float f2 = 8.0;
+        float y2 = wave2(x+0.1,a2,f2);
+        y = smax(y,y1,0.9);
+        y = smax(y,y2,0.8);
+        // y = smax(y,wave1(x*0.01),-0.9);
+        float peak3 = 0.2;
+        float narrow3 = 1.0;//*sin(iTime*10.);
+        float y3 = wave3(x+0.2,peak3,narrow3);
+        
+        y = smax(y,y3,0.8);
+        y = smax(y,0.2,0.9);
+        
+//        for(float j = 0.0;j<100.0;j++){
+            float index = floor(st.y  * lineNumF);
+            // index = 0.0;
+            float gap = 1.0 / lineNumF;
+            // for(float i = 0.0; i < lineNumF; i++){
+            float r = index * gap;
+            r += y * 0.02;
+            float line = 1.0 - smoothstep(0.0,lineWidith,abs(st.y - r));
+            col += vec3(line);
+            
+//        }
+
+    }
+
+    
 
     // Output to screen
     fragColor = vec4(col,1.0);
@@ -114,116 +144,14 @@ void main()
 );
 
 
-// ================================    2.1
-
-//vec3 col;
-//
-//vec2 uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
-//uv.y += 0.5;
-////vec2 uv = fragCoord.xy/iResolution.xy;
-//vec2 st = vec2(atan(uv.x,uv.y),length(uv));
-//st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
-//
-//
-//// if(st1.x >= 0.25 && st.x <= 0.75){
-//
-//vec2 st1 = st;
-//
-////float wave = -(sin(st.y*0.05*iTime) + 1.0)*0.5;
-//float index = floor(st1.y * lineNum);
-//
-//// not use yet ---------------------------------------------------
-////float wave = sin(0.0008*iTime*index)*sin(index);
-////st1.y += wave;
-//
-//float f = fract(st1.y * lineNum);
-//f += 0.03*sin(0.0001*iTime*index*index*index);
-//float line = smtLine(lineWidith,f);
-//col = vec3(line);
-//
-//
-////}
-//
-//
-//if(st.y <= offsetY){
-//    col *= 0.0;
-//}
-//
-//
-
-
-
-// ================================    2.0
-//vec3 col;
-//
-//vec2 uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
-//uv.y += 0.5;
-////vec2 uv = fragCoord.xy/iResolution.xy;
-//vec2 st = vec2(atan(uv.x,uv.y),length(uv));
-//st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
-//
-//st.y += sin(iTime);
-//if(st.x >= 0.25 && st.x <= 0.75){
-//    float f = fract(st.y * lineNum);
-//    float line = smtLine(lineWidith,f);
-//    col = vec3(line);
-//
-//
-//}
-//
-//
-//if(st.y <= offsetY){
-//    col *= 0.0;
-//}
-//
-//
-//
-//// Output to screen
-//fragColor = vec4(col,1.0);
-//
 
 
 
 
 
 
-// =======================================================
-//    float wave = (sin(iTime)+1.0)*0.5;
-//    float wave = fract(iTime);
-//    radius *= wave;
-//    uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
-//    //vec2 uv = fragCoord.xy/iResolution.xy;
-//    //vec2 st = vec2(atan(uv.x,uv.y),length(uv));
-//    //st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
-//    //0.0 and 1.0 locate on -y axis direction
-//
-//    vec3 col = vec3(0.0); // white as default , multiply by later on
-//    //col += ball(uv,vec2(0.0,0.0),.1);
-//    //col += square(uv,vec2(0.0,0.0),.05,45.);
-//
-//    uv.y += radius - 0.5;// move down along y axis
-//
-//    for(int j = 0;j < letterCol ;j++){
-//        uv.y += colGap;// move down along y axis by a gap between columns
-//        float theta = 360.0 * kArcLen/(radius * 2.0 * PI);
-//        for(int i = 0;i<num;i++){
-//            float theta1 = theta * float(i);
-//            float x = sin(theta1)*radius;
-//            float y = cos(theta1)*radius;
-//
-////            float x = 0.0001*radius;
-////            float y = 0.0001*radius;
-//
-//
-//            vec2 pos = vec2(x,y);
-//            col += square(uv,pos,squareWidith,theta1);
-//            pos.x *= -1.0;
-//            col += square(uv,pos,squareWidith,theta1);
-//
-//        }
-//
-//
-//    }
-//
+
+
+
 
 

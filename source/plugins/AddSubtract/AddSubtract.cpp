@@ -16,14 +16,14 @@
 
 static CFFGLPluginInfo PluginInfo ( 
 	AddSubtract::CreateInstance,		// Create method
-	"PWL00",								// Plugin unique ID
-	"PWL00",					// Plugin name
+	"PWL01",								// Plugin unique ID
+	"PWL_Line01",					// Plugin name
 	1,						   			// API major version number 													
 	500,								// API minor version number
 	1,									// Plugin major version number
 	000,								// Plugin minor version number
 	FF_EFFECT,							// Plugin type
-	"PWL00",			// Plugin description
+	"PWL01",			// Plugin description
 	"by Pampa -- lohosoft.com"				// About
 );
 
