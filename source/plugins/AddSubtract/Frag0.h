@@ -70,18 +70,21 @@ void main()
     // uv *= 0.5;// 0 ~ 1
     vec2 st = vec2(atan(uv.x,uv.y),length(uv));
     st.x += PI;// 0 ~ 2PI on -y axis
+    int tryLoop = 6;
+    for(int i = 0;i < tryLoop;i++ ){
+        float factor = 0.04 + 0.01 * sin(iTime*4.0);
+        st.y += factor * sin(0.0007*iTime*(st.x+iTime*0.1));
+        
+        float index = floor(st.y  * lineNumF);
+        
+        float gap = 1.0 / lineNumF;
+        float r = index * gap;
+        float line = 1.0 - smoothstep(0.0,lineWidith,abs(st.y - r));
+        
+        col += line;
+    }
+
     
-    
-    float factor = 0.04 + 0.01 * sin(iTime*4.0);
-    st.y += factor * sin(0.0007*iTime*(st.x+iTime*0.1));
-    
-    float index = floor(st.y  * lineNumF);
-    
-    float gap = 1.0 / lineNumF;
-    float r = index * gap;
-    float line = 1.0 - smoothstep(0.0,lineWidith,abs(st.y - r));
-    
-    col += line;
     if(st.y < .15){
         col += 1.0;
     }
