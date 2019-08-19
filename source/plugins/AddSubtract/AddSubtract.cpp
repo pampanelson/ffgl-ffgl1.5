@@ -10,6 +10,7 @@
 
 #define FFPARAM_SwitchTex   (0)
 #define FFPARAM_Float1      (1)
+#define FFPARAM_Tacking11      (2)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Plugin information
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,6 +47,8 @@ AddSubtract::AddSubtract()
     SetParamInfo(FFPARAM_Float1,"Float 1",FF_TYPE_STANDARD,0.0f);
     m_Float1 = 0.0f;
 
+    SetParamInfo(FFPARAM_Tacking11,"tracking 1",FF_TYPE_STANDARD,0.0f);
+    tracking11 = 0.0f;
 }
 
 AddSubtract::~AddSubtract()
@@ -192,6 +195,9 @@ float AddSubtract::GetFloatParameter(unsigned int dwIndex)
     case FFPARAM_Float1:
         retValue = m_Float1;
         return retValue;
+    case FFPARAM_Tacking11:
+        retValue = tracking11;
+        return retValue;
 	default:
 		return retValue;
 	}
@@ -206,6 +212,9 @@ FFResult AddSubtract::SetFloatParameter(unsigned int dwIndex, float value)
         break;
     case FFPARAM_SwitchTex:
         m_SwitchTex = value > 0.5;
+        break;
+    case FFPARAM_Tacking11:
+        m_Float1 = value;
         break;
 	default:
 		return FF_FAIL;

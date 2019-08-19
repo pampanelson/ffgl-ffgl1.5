@@ -53,4 +53,15 @@ protected:
     GLint m_Float1Location;
     
     double ticks;
+    
+    
+    
+    float tracking11;
+    float tracking12;
+    float tracking21;
+    float tracking22;
+    float tracking31;
+    float tracking32;
+    float tracking41;
+    float tracking42;
 };

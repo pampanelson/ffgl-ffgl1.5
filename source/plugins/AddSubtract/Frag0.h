@@ -64,32 +64,32 @@ void main()
     
     vec3 col;
     
-    vec2 uv = (fragCoord.xy - .5 * iResolution.xy)/iResolution.x; // uv -.5 ~ .5  , x axis is scale t0 1.
-    uv *= 2.0; // -1. ~ 1.
-    uv.y += iResolution.y/iResolution.x;// origin point on (0.5 * x , 0.0)
-    // uv *= 0.5;// 0 ~ 1
-    vec2 st = vec2(atan(uv.x,uv.y),length(uv));
-    st.x += PI;// 0 ~ 2PI on -y axis
-    int tryLoop = 6;
-    for(int i = 0;i < tryLoop;i++ ){
-        float factor = 0.04 + 0.01 * sin(iTime*4.0);
-        st.y += factor * sin(0.0007*iTime*(st.x+iTime*0.1));
-        
-        float index = floor(st.y  * lineNumF);
-        
-        float gap = 1.0 / lineNumF;
-        float r = index * gap;
-        float line = 1.0 - smoothstep(0.0,lineWidith,abs(st.y - r));
-        
-        col += line;
-    }
-
-    
-    if(st.y < .15){
-        col += 1.0;
-    }
-    fragColor = vec4(col,1.0);
-    
+//    vec2 uv = (fragCoord.xy - .5 * iResolution.xy)/iResolution.x; // uv -.5 ~ .5  , x axis is scale t0 1.
+//    uv *= 2.0; // -1. ~ 1.
+//    uv.y += iResolution.y/iResolution.x;// origin point on (0.5 * x , 0.0)
+//    // uv *= 0.5;// 0 ~ 1
+//    vec2 st = vec2(atan(uv.x,uv.y),length(uv));
+//    st.x += PI;// 0 ~ 2PI on -y axis
+//    int tryLoop = 6;
+//    for(int i = 0;i < tryLoop;i++ ){
+//        float factor = 0.04 + 0.01 * sin(iTime*4.0);
+//        st.y += factor * sin(0.0007*iTime*(st.x+iTime*0.1));
+//        
+//        float index = floor(st.y  * lineNumF);
+//        
+//        float gap = 1.0 / lineNumF;
+//        float r = index * gap;
+//        float line = 1.0 - smoothstep(0.0,lineWidith,abs(st.y - r));
+//        
+//        col += line;
+//    }
+//
+//    
+//    if(st.y < .15){
+//        col += 1.0;
+//    }
+//
+//    
     
 
 //    vec3 col;
@@ -111,7 +111,7 @@ void main()
 //
 //    col += line;
 //
-
+    col = vec3(1.0);
     // Output to screen
     fragColor = vec4(col,1.0);
     
