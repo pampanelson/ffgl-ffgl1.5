@@ -64,7 +64,7 @@ void main()
     
     vec3 col;
     
-//    vec2 uv = (fragCoord.xy - .5 * iResolution.xy)/iResolution.x; // uv -.5 ~ .5  , x axis is scale t0 1.
+    vec2 uv = (fragCoord.xy - .5 * iResolution.xy)/iResolution.x; // uv -.5 ~ .5  , x axis is scale t0 1.
 //    uv *= 2.0; // -1. ~ 1.
 //    uv.y += iResolution.y/iResolution.x;// origin point on (0.5 * x , 0.0)
 //    // uv *= 0.5;// 0 ~ 1
@@ -111,7 +111,9 @@ void main()
 //
 //    col += line;
 //
-    col = vec3(1.0);
+
+
+//    col = vec3(1.0);
     // Output to screen
     fragColor = vec4(col,1.0);
     
@@ -121,12 +123,17 @@ void main()
 
 
 
+// gpu press test
 
-
-
-
-
-
+//for(float i = 0.;i<400.;i++){
+//    //        col += 0.1 * sin(iTime*i + 3.1415926535 * i);
+//    //        uv.x += sin(iTime) * 0.01;
+//    col += iTime * pow(uv.x,3.0) + 4.1 * pow(uv.x,2.0) + 5.0 * pow(uv.x,2.0);
+//    
+//}
+//
+//col *= 0.1;
+//
 
 // ======================  backup
 
