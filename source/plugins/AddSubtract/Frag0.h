@@ -68,39 +68,28 @@ void main()
     fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
     
     
-    
+
     vec2 p = fragCoord.xy / iResolution.xy;
     
     vec2 uv = p*vec2(iResolution.x/iResolution.y,1.0);
-    uv.y -= .9;
+    vec2 uv1 = uv;
     
-//        vec2 uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
-//        uv.y += 0.5;
-        //vec2 uv = fragCoord.xy/iResolution.xy;
-        vec2 st = vec2(atan(uv.x,uv.y),length(uv));
-        st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
-        // origin on -y axis
-    
-    
-
-    
+    vec2 st = vec2(atan(uv.x,uv.y),length(uv));
+    st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
+    // origin on -y axis
     
     vec3 col;
-
+    float number = 40.;
+    float noise = noise(vec2(uv.y*2.3,uv.x*4.));
+    noise = pow(noise,2.+sin(iTime*3.0));
+    uv1.y += sin(noise)*0.2;
+    float uvy = fract(uv1.y * number);
     
-    float number = 180.0;// pressure test
     
-    float noise = noise(vec2(uv.y*1.,uv.x*1.1+1./number*sin(iTime*20.)));
-    noise = pow(noise,2.);
-    float r = noise * 1.;
+    float r = noise * 1./number;
+    col += 1. - smoothstep(0.0,0.07,abs(uvy - r));
     
-    for(float i=0.0;i<number;i++){
-
-        col += 1. - smoothstep(0.0,0.005,abs(uv.y +  i/30. - r*noise));
-        
-        
-    }
-    
+    fragColor = vec4( col, 1.0 );
 
     
     // Output to screen
