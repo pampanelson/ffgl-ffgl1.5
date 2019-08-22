@@ -36,73 +36,26 @@ float smax(float a,float b,float k){
     return smin(a,b,-k);
 }
 
-float hash1(float s){
-    return sin(s * 42.6520981210954362);
-}
 
-float hash2(float s){
-    return fract(s * 24.57608761367653 + 0.4146145118678);
+float hash(vec2 p)  // replace this by something better
+{
+    p  = 50.0*fract( p*0.34768375633183 + vec2(0.71,0.113));
+    return -1.0+2.0*fract( p.x*p.y*(p.x+p.y) );
 }
-
-float wave1(float stx,float scale,float t){    // float angle = abs(sin(iTime))* 1.5;
-    
-    
-    //float angle = .3 + 0.4 * abs(sin(iTime)) - 0.12;// 0.3~0.5
-    //float angle = .3 + 0.4 * a - 0.12;// 0.3~0.5
-    
-    // stx += angle;
-    float hash1 = hash1(t);
-    // float hash2 = hash2(iTime);
-    float r;
-    float r1 = (0.1 + 0.0001 * hash1) * abs(sin((stx + 0.1*t) * 4.1));
-    float r2 = (0.12 - 0.001 * hash1) * sin(stx*14. + t);
-    float r3 = (.35 + 0.0001 * hash1) * cos(stx*18. + t)-0.6;
-    
-    
-    r = smax(r,r1,0.6);
-    r = smax(r,r2,.2);
-    r = smax(r,r3,.6);
-    r *= scale;
-    r = max(0.0,r);
-    return r;
-}
-
-float wave2(float stx,float scale){
-    float res;
-    
-    stx = 4.*(stx-0.5);// input stx is 0.25~0.75 after uv.y += 0.5
-    // now convert stx to -1 ~ 1 for local point up curve
-    res = 1. - abs(stx) - 0.1; // move sharp peak lower bit
-    float res1 = 1. - pow(stx,2.0);
-    res = smax(res,res1,0.2); // linear make very sharp peak,mix with powered smooth peak
-    res *= scale; // scale down
-    res = max(0.0,res);
-    
-    return res;
-}
-
-float wave(float stx,float t,float scale){
-    // st.x += 0.25 * sin(iTime);
-    // a = abs(sin(iTime));
-    float w1 = wave1(stx,0.7,t);
-    float w2 = wave2(stx,0.15);
-    
-    // for debug
-    // if(st.y < w1){
-    //     col += vec3(1.0,0.0,0.0);
-    // }
-    
-    // if(st.y < w2){
-    //     col += vec3(0.0,1.0,0.0);
-    // }
-    
-    float w = smax(w1,w2,0.02);
-    w *= scale;
-    return w;
-}
-
                                                         
-                                                        
+float noise( in vec2 p )
+{
+    vec2 i = floor( p );
+    vec2 f = fract( p );
+    
+    vec2 u = f*f*(3.0-2.0*f);
+    
+    return mix( mix( hash( i + vec2(0.0,0.0) ),
+                    hash( i + vec2(1.0,0.0) ), u.x),
+               mix( hash( i + vec2(0.0,1.0) ),
+                   hash( i + vec2(1.0,1.0) ), u.x), u.y);
+}
+
 
 void main()
 {
@@ -115,35 +68,40 @@ void main()
     fragCoord = vec2(gl_FragCoord.x,iResolution.y - gl_FragCoord.y) ;
     
     
+    
+    vec2 p = fragCoord.xy / iResolution.xy;
+    
+    vec2 uv = p*vec2(iResolution.x/iResolution.y,1.0);
+    uv.y -= .9;
+    
+//        vec2 uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
+//        uv.y += 0.5;
+        //vec2 uv = fragCoord.xy/iResolution.xy;
+        vec2 st = vec2(atan(uv.x,uv.y),length(uv));
+        st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
+        // origin on -y axis
+    
+    
+
+    
+    
     vec3 col;
-    
-    vec2 uv = (fragCoord - .5 * iResolution.xy)/iResolution.y; // uv -.5 ~ .5
-    uv.y += 0.5;
-    //vec2 uv = fragCoord.xy/iResolution.xy;
-    vec2 st = vec2(atan(uv.x,uv.y),length(uv));
-    st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
-    // origin on -y axis
-    
-    
 
+    
+    float number = 180.0;// pressure test
+    
+    float noise = noise(vec2(uv.y*1.,uv.x*1.1+1./number*sin(iTime*20.)));
+    noise = pow(noise,2.);
+    float r = noise * 1.;
+    
+    for(float i=0.0;i<number;i++){
 
-
-//    col = vec3(1.0);
-    float lineNumF = 50.;
-    for(float i = 0.;i<lineNumF;i++){
-        float scale = 0.5;
-        float w = wave1(st.x,scale*i*0.03,iTime*2.0);
+        col += 1. - smoothstep(0.0,0.005,abs(uv.y +  i/30. - r*noise));
         
-       // if(st.y < w){
-        //    col += 1.0;
-       // }
         
-        float line = 1.0 - smoothstep(0.0,lineWidith,abs(st.y - w));
-        
-        col += line;
     }
-
     
+
     
     // Output to screen
     fragColor = vec4(col,1.0);
