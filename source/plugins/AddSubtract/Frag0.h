@@ -33,7 +33,7 @@ uniform float lineMiRippleSpeed;
 uniform float lineMaRippleSize;
 uniform float lineMaRippleSpeed;
 
-
+uniform float bwLine;
 
 uniform float trackingData[12]; // 12 size()
 
@@ -265,8 +265,8 @@ void main()
     col = vec3(line_wave(st,lineNum,lineWidth,lineOffset,y,bLineRipple));
     
     
-    
-    
+    vec3 col1 = 1. - col;
+    col = mix(col1,col,bwLine);
     // debug distort wave =============
     bool bWaveDistortDebug = true;
     //     if(st.y < y && bWaveDistortDebug){
@@ -280,6 +280,6 @@ void main()
     
     gl_FragColor = fragColor;
 }
-                                                        );
+);
 
 #endif /* Frag_h */

@@ -102,6 +102,8 @@ protected:
     
     float waveScale;
     
+    
+    float bwLine;
     // control wave shape and change rate
     float waveDelta;
     float waveMax;
@@ -162,7 +164,7 @@ protected:
     
     GLint waveScaleLoc;
     
-    
+    GLint bwLineLoc;
     
     FFGLShader m_shader;
     GLint m_inputTextureLocation;

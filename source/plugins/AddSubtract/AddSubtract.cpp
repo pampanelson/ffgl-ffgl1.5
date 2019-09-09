@@ -23,9 +23,11 @@
 
 #define FFPARAM_waveDelta  (9)
 #define FFPARAM_waveMax   (10)
-#define FFPARAM_text_data     (11)
-#define FFPARAM_text_data1     (12)
-#define FFPARAM_text_data2     (13)
+#define FFPARAM_bwLine   (11)
+
+#define FFPARAM_text_data     (12)
+#define FFPARAM_text_data1     (13)
+#define FFPARAM_text_data2     (14)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +81,7 @@ m_inputTextureLocation(-1)
     lineMiRippleSpeed = 1.0;
     lineMaRippleSize = 0.3;
     lineMaRippleSpeed = 1.0;
-    
+    bwLine = 0.0;
     
     
     SetParamInfo(FFPARAM_bLineRipple ,"line ripple",FF_TYPE_BOOLEAN,bLineRipple);
@@ -96,7 +98,8 @@ m_inputTextureLocation(-1)
     
     SetParamInfo(FFPARAM_waveDelta,"wave delta",FF_TYPE_STANDARD,waveDelta);
     SetParamInfo(FFPARAM_waveMax,"wave max",FF_TYPE_STANDARD,waveMax);
-    
+    SetParamInfo(FFPARAM_bwLine,"b w line",FF_TYPE_STANDARD,bwLine);
+
     
     SetParamInfo(FFPARAM_text_data, "oscdataline0", FF_TYPE_TEXT, rawOscTextData.c_str());
 //    SetParamInfo(FFPARAM_text_data1, "oscdataline1", FF_TYPE_TEXT, rawOscTextData.c_str());
@@ -150,7 +153,8 @@ FFResult AddSubtract::InitGL(const FFGLViewportStruct *vp)
     lineMiRippleSpeedLoc = m_shader.FindUniform("lineMiRippleSpeed");
     lineMaRippleSizeLoc = m_shader.FindUniform("lineMaRippleSize");
     lineMaRippleSpeedLoc = m_shader.FindUniform("lineMaRippleSpeed");
-    
+    bwLineLoc = m_shader.FindUniform("bwLine");
+
     
     
     waveScaleLoc = m_shader.FindUniform("waveScale");
@@ -267,6 +271,7 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
     
     glUniform1fv(trackingDataLoc,kTrackingDataSize,trackingData);
     
+    glUniform1f(bwLineLoc, bwLine);
     
     
     glUniform1f(waveScaleLoc, waveScale);
@@ -356,7 +361,7 @@ float AddSubtract::GetFloatParameter(unsigned int dwIndex)
             
             
         case FFPARAM_lineNum :
-            retValue = lineNum / 300,0;
+            retValue = lineNum / 300.0;
             return retValue;
         case FFPARAM_lineWidth:
             retValue = lineWidth * .1;
@@ -383,6 +388,10 @@ float AddSubtract::GetFloatParameter(unsigned int dwIndex)
             
         case FFPARAM_waveMax:
             retValue = waveMax;
+            return retValue;
+            
+        case FFPARAM_bwLine:
+            retValue = bwLine;
             return retValue;
             
             
@@ -443,6 +452,10 @@ FFResult AddSubtract::SetFloatParameter(unsigned int dwIndex, float value)
             
         case FFPARAM_waveMax:
             waveMax = value;
+            break;
+            
+        case FFPARAM_bwLine:
+            bwLine = value;
             break;
             
             
