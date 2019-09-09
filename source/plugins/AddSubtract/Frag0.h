@@ -87,7 +87,27 @@ void main()
     
     
     float r = noise * 1./number;
-    col += 1. - smoothstep(0.0,0.07,abs(uvy - r));
+//    col += 1. - smoothstep(0.0,0.07,abs(uvy - r));
+    
+    
+    for(float i = 0.;i<1500.;i++){
+        //        col += 0.1 * sin(iTime*i + 3.1415926535 * i);
+        //        uv.x += sin(iTime) * 0.01;
+        col += iTime * pow(uv.x,3.0) + 4.1 * pow(uv.x,2.0) + 5.0 * pow(uv.x,2.0);
+        
+        float number = 40.;
+        float noise = noise(vec2(uv.y*2.3,uv.x*4.));
+        noise = pow(noise,2.+sin(iTime*3.0));
+        uv1.y += sin(noise)*0.2;
+        float uvy = fract(uv1.y * number);
+        
+        
+        float r = noise * 1./number;
+        
+    
+    }
+    
+    col *= 0.1 * sin(iTime) ;
     
     fragColor = vec4( col, 1.0 );
 
