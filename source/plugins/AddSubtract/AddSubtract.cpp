@@ -85,8 +85,8 @@ m_inputTextureLocation(-1)
     SetParamInfo(FFPARAM_bLineRipple ,"line ripple",FF_TYPE_BOOLEAN,bLineRipple);
     SetParamInfo(FFPARAM_bLineTracking,"line tracking",FF_TYPE_BOOLEAN,bLineTracking);
     
-    SetParamInfo(FFPARAM_lineNum ,"line number",FF_TYPE_STANDARD,lineNum/200.0f);
-    SetParamInfo(FFPARAM_lineWidth,"line width",FF_TYPE_STANDARD,lineWidth * 10.0f);
+    SetParamInfo(FFPARAM_lineNum ,"line number",FF_TYPE_STANDARD,lineNum/300.0f);
+    SetParamInfo(FFPARAM_lineWidth,"line width",FF_TYPE_STANDARD,lineWidth * .1f);
     SetParamInfo(FFPARAM_lineOffset,"line offset",FF_TYPE_STANDARD,lineOffset / 50.0f);
     
     SetParamInfo(FFPARAM_lineMiRippleSize,"line mi size",FF_TYPE_STANDARD,lineMiRippleSize);
@@ -356,10 +356,10 @@ float AddSubtract::GetFloatParameter(unsigned int dwIndex)
             
             
         case FFPARAM_lineNum :
-            retValue = lineNum / 200,0;
+            retValue = lineNum / 300,0;
             return retValue;
         case FFPARAM_lineWidth:
-            retValue = lineWidth * 10.0;
+            retValue = lineWidth * .1;
             return retValue;
         case FFPARAM_lineOffset:
             retValue = lineOffset / 50.0;
@@ -414,10 +414,10 @@ FFResult AddSubtract::SetFloatParameter(unsigned int dwIndex, float value)
             
             
         case FFPARAM_lineNum:
-            lineNum = value * 200.0;
+            lineNum = value * 300.0;
             break;
         case FFPARAM_lineWidth:
-            lineWidth = value / 10.;
+            lineWidth = value / .1;
             break;
         case FFPARAM_lineOffset:
             lineOffset = value * 50.0;

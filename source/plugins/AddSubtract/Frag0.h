@@ -35,8 +35,6 @@ uniform float lineMaRippleSpeed;
 
 
 
-niform float waveScale;
-
 uniform float trackingData[12]; // 12 size()
 
 
@@ -254,7 +252,7 @@ void main()
         float angleIndex = 1.0/kTrackingDataSizeF * float(i);
         angleIndex += 0.01 * rand(iTime)/kTrackingDataSizeF; // and some random offset
         float scale = clamp(0.001,1.9,trackingData[i]);
-        y += wave_distort1(bWordTracking,st,angleIndex,scale);
+        y += wave_distort1(bLineTracking,st,angleIndex,scale);
         // }
         
     }
