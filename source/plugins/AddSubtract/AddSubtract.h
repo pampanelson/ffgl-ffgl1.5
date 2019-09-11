@@ -111,39 +111,9 @@ protected:
     std::string rawOscTextData = "hello";
     
     
-    int kTrackingDataSize = 12;
-    GLfloat trackingData[12];
-    
-    //    lineNum = 20;
-    //    lineWidth = 0.02;
-    //    lineOffset = 2.0;
-    //    lineMiRippleSize = 0.3;
-    //    lineMiRippleSpeed = 1.0;
-    //    lineMaRippleSize = 0.3;
-    //    lineMaRippleSpeed = 1.0;
-    //
-    
-    //case FFPARAM_lineNum :
-    //    retValue = lineNum / 100,0;
-    //    return retValue;
-    //case FFPARAM_lineWidth:
-    //    retValue = lineWidth * 10.0;
-    //    return retValue;
-    //case FFPARAM_lineOffset:
-    //    retValue = lineOffset / 20.0;
-    //    return retValue;
-    //case FFPARAM_lineMiRippleSize:
-    //    retValue = lineMiRippleSize;
-    //    return retValue;
-    //case FFPARAM_lineMiRippleSpeed:
-    //    retValue = lineMiRippleSpeed / 10.;
-    //    return retValue;
-    //case FFPARAM_lineMaRippleSize:
-    //    retValue = lineMaRippleSize;
-    //    return retValue;
-    //case FFPARAM_lineMaRippleSpeed:
-    //    retValue = lineMaRippleSpeed / 10.;
-    //    return retValue;
+    int kTrackingDataSize = 16;
+    GLfloat trackingData[16]; // for 8 group data wave position and amplitute for each
+    std::vector<float> trackingDataVec[16];
     
     
     

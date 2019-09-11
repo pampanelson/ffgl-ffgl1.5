@@ -26,8 +26,8 @@
 #define FFPARAM_bwLine   (11)
 
 #define FFPARAM_text_data     (12)
-#define FFPARAM_text_data1     (13)
-#define FFPARAM_text_data2     (14)
+//#define FFPARAM_text_data1     (13)
+//#define FFPARAM_text_data2     (14)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
