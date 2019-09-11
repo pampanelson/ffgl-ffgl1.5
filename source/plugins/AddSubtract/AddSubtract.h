@@ -99,9 +99,8 @@ protected:
     float lineMaRippleSize;
     float lineMaRippleSpeed;
     
-    
-    float waveScale;
-    
+
+    float waveAmp;
     
     float bwLine;
     // control wave shape and change rate
@@ -111,9 +110,9 @@ protected:
     std::string rawOscTextData = "hello";
     
     
-    int kTrackingDataSize = 16;
-    GLfloat trackingData[16]; // for 8 group data wave position and amplitute for each
-    std::vector<float> trackingDataVec[16];
+    int kTrackingDataSize = 8;
+    GLfloat trackingData[8]; // for 8 group data wave position and amplitute for each
+    std::vector<float> trackingDataVec[8];
     
     
     
@@ -135,7 +134,7 @@ protected:
     GLint waveScaleLoc;
     
     GLint bwLineLoc;
-    
+    GLint waveAmpLoc;// smaller means bigger wave peak to the lower wave bottom;// 0.05 ~ 0.6
     FFGLShader m_shader;
     GLint m_inputTextureLocation;
     GLint m_TicksLocation;

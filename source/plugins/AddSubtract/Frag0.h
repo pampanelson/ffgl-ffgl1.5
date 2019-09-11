@@ -34,12 +34,13 @@ uniform float lineMaRippleSize;
 uniform float lineMaRippleSpeed;
 
 uniform float bwLine;
+uniform float globalWaveAmp;// smaller means bigger wave peak to the lower wave bottom;
+                                                        // 0.06 ~ 0.6
+uniform float trackingData[8]; // 12 size()
 
-uniform float trackingData[16]; // 12 size()
 
-
-int kTrackingDataSize = 16;
-float kTrackingDataSizeF = 16.0;
+int kTrackingDataSize = 8;
+float kTrackingDataSizeF = 8.0;
 float PI = 3.1415926535;
 float aPI = acos(-1.);
 
@@ -74,109 +75,6 @@ float wave3(float x,float peak,float narrow){
 
 
 
-float wave_distort(float use,vec2 st,float angle){
-    // distort =========================================
-    
-    
-    vec2 st2 = st;
-    //st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
-    
-    float x = st2.x;
-    x *= .2; // wave smooth factor
-    // x -= fract(iTime*0.1);
-    //x += 0.5;
-    //x = -x;
-    
-    // =+++++++++++++ IMPORTANT ++++++++++++++++++++++++++++
-    // not use distort or distort angle is 0.0 which is default value
-    if(use < 0.5){
-        
-        x += 1.; // this value makes no distort ================ . TODO
-    }
-    else{
-        x += -.0; // 0.0 is up direct , -0.5 is right direct , 0.5 is left direct
-        x += 0.5 - angle;// angle is 0. ~ 1, 1 is right direct , 0 is left direct
-        
-    }
-    
-    // float x = uv.x;
-    float y = 0.0;
-    float a1 = -.2*sin(iTime*5.0);
-    float f1 = 12.5;
-    float y1 = wave2(x,a1,f1);
-    float a2 = 0.0;//
-    a2 = sin(iTime*10.)*0.1;
-    float f2 = 18.0; // power ===============================
-    float y2 = wave2(x+0.1,a2,f2);
-    y = smax(y,y1,0.9);
-    y = smax(y,y2,0.8);
-    // y = smax(y,wave1(x*0.01),-0.9);
-    float peak3 = 0.15;//
-    float narrow3 = 4.0;//*sin(iTime*10.);
-    float y3 = wave3(x+0.2,peak3,narrow3);
-    
-    y = smax(y,y3,0.8);
-    y = smax(y,0.2,0.9);
-    
-    y *= .8;// whole scale =======================
-    
-    return y;
-}
-
-
-float wave_distort0(float use,vec2 st,float angle,float scale){
-    // distort =========================================
-    
-    float fixScale = 0.5;
-    vec2 st2 = st;
-    //st.x = st.x/(PI*2.0) + .5; // before st.x is -π ~ π after is  normalized 0.0 ~ 1.0
-    
-    float x = st2.x;
-    x *= .2; // wave smooth factor
-    // x -= fract(iTime*0.1);
-    //x += 0.5;
-    //x = -x;
-    
-    // =+++++++++++++ IMPORTANT ++++++++++++++++++++++++++++
-    // not use distort or distort angle is 0.0 which is default value
-    if(use < 0.5){
-        
-        x += 1.; // this value makes no distort ================ . TODO
-    }
-    else{
-        x += -.0; // 0.0 is up direct , -0.5 is right direct , 0.5 is left direct
-        x += 0.5 - angle;// angle is 0. ~ 1, 1 is right direct , 0 is left direct
-        
-    }
-    
-    // float x = uv.x;
-    float y = 0.0;
-    // float a1 = -.2*sin(iTime*5.0);
-    // a1 = 0.8; // use this one to control wave shape, 0.05 is small 0.8 is biggest
-    float a1 = scale;
-    a1 += sin(iTime)*0.02;// add some dynamics
-    float f1 = 12.5;
-    float y1 = wave2(x,a1,f1);
-    float a2 = 0.0;//
-    // a2 = sin(iTime*10.)*0.1;
-    a2 = 0.1;
-    float f2 = 8.0; // power ===============================
-    float y2 = wave2(x+0.1,a2,f2);
-    y = smax(y,y1,0.9);
-    y = smax(y,y2,0.8);
-    // y = smax(y,wave1(x*0.01),-0.9);
-    float peak3 = 0.15;//
-    float narrow3 = 4.0;//*sin(iTime*10.);
-    float y3 = wave3(x+0.2,peak3,narrow3);
-    
-    y = smax(y,y3,0.5);// 0.1 is sharper wave , ============  TODO
-    y = smax(y,0.2,fixScale);// scale is 0.01 ~ 0.9 , lower is bigger ========  TODO
-    
-    y *= 1.;// whole scale =======================
-    y += sin(iTime) * 0.01; // shaking
-    
-    return y;
-}
 float wave_distort11(bool use,vec2 st,float angle,float factor){
     // distort =========================================
     
@@ -228,21 +126,29 @@ float wave_distort11(bool use,vec2 st,float angle,float factor){
 
 
 
-float wave_distort1(bool bUseWaveDistort,vec2 st,float angle){
-    float y = wave_distort11(bUseWaveDistort,st,angle,0.2+ rand(iTime*0.000001));
-    float y1 = wave_distort11(bUseWaveDistort,st,angle,0.3 + rand(iTime*0.000001));
-    y = mix(y,y1,0.9 + rand(iTime*0.000001) );
-    float y2 = wave_distort11(bUseWaveDistort,st,angle,0.9 + rand(iTime*0.000001));
-    y = mix(y,y2,0.9+ rand(iTime*0.000001));
-    
-    float y3 = wave_distort11(bUseWaveDistort,st,angle,1.9);
-    
-    y = mix(y,y3,0.1+ rand(iTime*0.000001));
-    
-    float waveBottom = 0.1;// smaller means bigger wave peak to the lower wave bottom;
-    // 0.05 ~ 0.6
-    y = smax(y,waveBottom,0.9);
-    
+float wave_distort1(float use,vec2 st,float angle,float amp){
+
+
+
+    float y = 0.0;
+    if(use > 0.0){
+        bool bUseWaveDistort = true;
+        y = wave_distort11(bUseWaveDistort,st,angle,0.2+ rand(iTime*0.000001));
+        float y1 = wave_distort11(bUseWaveDistort,st,angle,0.3 + rand(iTime*0.000001));
+        y = mix(y,y1,0.9 + rand(iTime*0.000001) );
+        float y2 = wave_distort11(bUseWaveDistort,st,angle,0.9 + rand(iTime*0.000001));
+        y = mix(y,y2,0.9+ rand(iTime*0.000001));
+        
+        float y3 = wave_distort11(bUseWaveDistort,st,angle,1.9);
+        
+        y = mix(y,y3,0.1+ rand(iTime*0.000001));
+        
+        float waveBottom = amp;// smaller means bigger wave peak to the lower wave bottom;
+        // 0.05 ~ 0.6
+        y = smax(y,waveBottom,0.9);
+        
+    }
+
     
     
     return y;
@@ -259,7 +165,11 @@ float line_wave(vec2 st,float lineNum,float lineWidth,float lineOffset,float dis
         sty += maRipple * lineMaRippleSize;
     }
     
-    sty /= distort;
+    // not tracking ,input value is 0.0, not good
+    if(distort > 0.0){
+        sty /= distort;
+
+    }
     sty *= lineNum;
     
     
@@ -313,13 +223,20 @@ void main()
     
     // y += wave_distort(bWordTracking,st,0.5,0.8);
     
-    for (int i = 0; i < 8; i++)
-    {
-        float angle = sin(iTime*float(i));
-
-        y = smax(y,wave_distort1(true,st,angle),0.1);
-        
+    if(bLineTracking>0.0){
+        for (int i = 0; i < 2; i++)
+        {
+            float angle = sin(iTime*float(i));
+            float amp = globalWaveAmp;// smaller means bigger wave peak to the lower wave bottom;
+            // 0.05 ~ 0.6
+            
+            y = smax(y,wave_distort1(bLineTracking,st,angle,amp),0.1);
+            
+        }
+    }else{
+        y = globalWaveAmp;
     }
+
     
     
     
