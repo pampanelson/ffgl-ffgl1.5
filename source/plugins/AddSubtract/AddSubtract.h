@@ -111,7 +111,7 @@ protected:
     
     
     int kTrackingDataSize = 8;
-    GLfloat trackingData[8]; // for 8 group data wave position and amplitute for each
+    GLfloat trackingData[8]; // -1 for no tracking at all;
     std::vector<float> trackingDataVec[8];
     
     

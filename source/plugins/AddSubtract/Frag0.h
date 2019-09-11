@@ -127,8 +127,15 @@ float wave_distort11(bool use,vec2 st,float angle,float factor){
 
 
 float wave_distort1(float use,vec2 st,float angle,float amp){
+    // after trying for +y axis , angle center is 0.5 , range is about 3.5, means -3.0~4.0 is its range
 
+    // normalize from 0.0 ~ 1.0
 
+    // important ========================================  
+    angle *= 7.;// 0~7.;
+    angle -= 3.0;// -3 ~ 4.  original 0.5 now is 0.5 still
+    angle *= 1.01;
+    // input angle should be < -0.1 or > 1.1 for save no motion at all
 
     float y = 0.0;
     if(use > 0.0){
@@ -224,9 +231,9 @@ void main()
     // y += wave_distort(bWordTracking,st,0.5,0.8);
     
     if(bLineTracking>0.0){
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < kTrackingDataSize; i++)
         {
-            float angle = sin(iTime*float(i));
+            float angle = trackingData[i]; 
             float amp = globalWaveAmp;// smaller means bigger wave peak to the lower wave bottom;
             // 0.05 ~ 0.6
             
