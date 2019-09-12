@@ -134,7 +134,6 @@ float wave_distort1(float use,vec2 st,float angle,float amp){
     // important ========================================  
     angle *= 7.;// 0~7.;
     angle -= 3.0;// -3 ~ 4.  original 0.5 now is 0.5 still
-    angle *= 1.01;
     // input angle should be < -0.1 or > 1.1 for save no motion at all
 
     float y = 0.0;

@@ -202,34 +202,16 @@ FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
     std::vector<float> oscDataInFloatVec = MyConvertStingToFloatVector(rawOscTextData);
     
     
-    // osc data sanity , all 0.0 by default
+    // osc data sanity , all -0.1 by default
     if(oscDataInFloatVec.size() != kTrackingDataSize){
         for (int i = 0; i < kTrackingDataSize; i++) {
             //            trackingData[i] = 0.05 * i; // for debug only
-            trackingData[i] = 0.0;
+            trackingData[i] = -0.1;
         }
         
     }else{
         for (int i = 0; i < kTrackingDataSize; i++) {
-            //        data[i] = 0.003 * float(i);
-            float mark = oscDataInFloatVec[i];
-            
-            if (mark > 0.0) {
-                trackingData[i] += waveDelta;
-            }
-            else{
-                trackingData[i] -= waveDelta;
-            }
-            
-            
-            // clamp
-            if (trackingData[i] < 0.0) {
-                trackingData[i] = 0.0;
-            }
-            
-            if(trackingData[i] > waveMax*2.0){
-                trackingData[i] = waveMax*2.0;
-            }
+            trackingData[i] = oscDataInFloatVec[i];
         }
         
     }
