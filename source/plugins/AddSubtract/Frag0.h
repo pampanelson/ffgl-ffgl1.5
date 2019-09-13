@@ -232,7 +232,7 @@ void main()
     float y = 0.0;
     
     
-    if(bWordTracking>0.0){
+    if(bLineTracking>0.0){
         // press test 
         for (float i = 0.0; i < kTrackingDataSizeF;i++)
         {
@@ -251,7 +251,7 @@ void main()
             float power = trackingData[int(i)];
 
             float peakFreq = 2.;//2 is normal , 4 is quick 6 is very quick ++++++++++++++++++++++++++
-            y = smax(y,wave_distort1(bWordTracking,st,angle,amp,power,peakFreq),0.1);
+            y = smax(y,wave_distort1(bLineTracking,st,angle,amp,power,peakFreq),0.1);
 
         }
 
@@ -282,7 +282,7 @@ void main()
     
     // Output to screen
     
-//    col = vec3(sin(iTime));
+   // col = vec3(sin(iTime));
     fragColor = vec4(col,1.0);
     
     

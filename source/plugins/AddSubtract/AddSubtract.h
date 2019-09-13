@@ -109,11 +109,10 @@ protected:
     
     std::string rawOscTextData = "hello";
     
-    
-    int kTrackingDataSize = 8;
-    GLfloat trackingData[8]; // -1 for no tracking at all;
-    std::vector<float> trackingDataVec[8];
-    
+
+    int kTrackingDataSize = 18;
+    GLfloat trackingData[18]; // -1 for no tracking at all;
+    std::vector<float> trackingDataVec[18];
     
     
     GLint bLineRippleLoc;

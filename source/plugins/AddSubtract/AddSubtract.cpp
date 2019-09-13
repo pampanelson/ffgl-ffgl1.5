@@ -73,8 +73,6 @@ m_inputTextureLocation(-1)
     bLineRipple = true;
     bLineTracking = false;
     
-    
-    
     lineNum = 20;
     lineWidth = 0.02;
     lineOffset = 2.0;
@@ -191,7 +189,10 @@ FFResult AddSubtract::DeInitGL()
 FFResult AddSubtract::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
     if (pGL->numInputTextures<1)
-        return FF_FAIL;
+        return FF_FAIL;   int kTrackingDataSize = 18;
+    GLfloat trackingData[18]; // -1 for no tracking at all;
+    std::vector<float> trackingDataVec[18];
+    
     
     if (pGL->inputTextures[0]==NULL)
         return FF_FAIL;
